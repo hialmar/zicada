@@ -72,7 +72,7 @@ public class Main {
 						.replaceAll(" ", "%20");
 				String[] result = xml.parseData(parm);
 				writer.write("PRIVMSG " + channel + " :Location: " + result[0]
-						+ " Temp: " + result[1] + "C" + ", " + result[2]
+						+ ", Temp: " + result[1] + "C" + ", " + result[2]
 						+ "\r\n");
 				writer.flush();
 			}
