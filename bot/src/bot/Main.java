@@ -16,7 +16,7 @@ public class Main {
 		String nick = "zicbot";
 		String login = "zicbot";
 
-		// The channel which the Main will join.
+		// The channel which the Main will join. HURR DUURR TEST
 		String channel = "#zictest";
 
 		// Connect directly to the IRC server over socket, using buffered reads
