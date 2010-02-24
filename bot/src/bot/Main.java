@@ -16,7 +16,7 @@ public class Main {
 		String nick = "zicbot";
 		String login = "zicbot";
 
-		// The channel which the Main will join. HURR DUURR TEST
+		// The channel which the Main will join.
 		String channel = "#zictest";
 
 		// Connect directly to the IRC server over socket, using buffered reads
@@ -62,7 +62,7 @@ public class Main {
 			}
 			// Close the socket and break out of the loop if told so
 			// probably might want to comment this out in production ;)
-			//if (line.contains("PRIVMSG " + channel + " :!die")) {
+			//if (line.contains("PRIVMSG " + channel + " :!die")) { 
 			//	socket.close();
 			//	break;
 			//}
