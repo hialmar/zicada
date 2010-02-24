@@ -11,13 +11,13 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 
 		// The server to connect to and our details.
-		String server = "irc.homelien.no";
+		String server = "irc.sorcery.net";
 		int port = 6667;
 		String nick = "zicbot";
 		String login = "zicbot";
 
 		// The channel which the Main will join.
-		String channel = "#zictest";
+		String channel = "#alfa";
 
 		// Connect directly to the IRC server over socket, using buffered reads
 		// and writes.
@@ -73,7 +73,7 @@ public class Main {
 				String[] result = xml.parseData(parm);
 				writer.write("PRIVMSG " + channel + " :Location: " + result[0]
 						+ ", Temp: " + result[1] + "C" + ", " + result[2]
-						+ "\r\n");
+                                                + " " + result[3] + "\r\n");
 				writer.flush();
 			}
 		}

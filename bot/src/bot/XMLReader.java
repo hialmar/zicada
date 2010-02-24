@@ -16,6 +16,7 @@ public class XMLReader {
 		private String cityData = "";
 		private String tempData = "";
 		private String windData = "";
+                private String humidityData = "";
 
 		public String getCityData() {
 			return cityData;
@@ -27,6 +28,9 @@ public class XMLReader {
 
 		public String getWindData() {
 			return windData;
+		}
+                public String getHumidityData() {
+			return humidityData;
 		}
 
 		@Override
@@ -45,12 +49,16 @@ public class XMLReader {
 				// get the corresponding attribute from data=""
 				windData = attrs.getValue("data");
 			}
+                        if (wName.equals("humidity")) {
+				// get the corresponding attribute from data=""
+				humidityData = attrs.getValue("data");
+			}
 		}
 	}
 
 	public String[] parseData(String city) throws MalformedURLException {
 		URL url = new URL("http://www.google.com/ig/api?weather=" + city);
-		String[] resultArray = new String[3];
+		String[] resultArray = new String[4];
 		try {
 			// creates and returns new instance of SAX-implementation:
 			SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -66,6 +74,7 @@ public class XMLReader {
 			resultArray[0] = handler.getCityData();
 			resultArray[1] = handler.getTempData();
 			resultArray[2] = handler.getWindData();
+                        resultArray[3] = handler.getHumidityData();
 
 		} catch (Exception ex) {
 			ex.printStackTrace(System.out);
