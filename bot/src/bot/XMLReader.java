@@ -13,9 +13,9 @@ import org.xml.sax.helpers.DefaultHandler;
 public class XMLReader {
 
 	public static final class SaxHandler extends DefaultHandler {
-		String cityData = "";
-		String tempData = "";
-		String windData = "";
+		private String cityData = "";
+		private String tempData = "";
+		private String windData = "";
 
 		public String getCityData() {
 			return cityData;
@@ -62,7 +62,7 @@ public class XMLReader {
 
 			// and parse:
 			parser.parse(url.openStream(), handler);
-
+                        // store parsed data in array
 			resultArray[0] = handler.getCityData();
 			resultArray[1] = handler.getTempData();
 			resultArray[2] = handler.getWindData();
