@@ -18,7 +18,7 @@ public class Main {
 		String channel = "#zictest";
 
 		// Connect directly to the IRC server over socket, using buffered reads
-		// and writes. test
+		// and writes.
 		Socket socket = new Socket(server, port);
 		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
 				socket.getOutputStream()));
