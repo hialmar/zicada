@@ -2,20 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package bot;
 
 /**
  *
  * @author b9
  */
-
 import java.util.Random;
 
-
-
 public class Dice {
-
 
     private Random generator;
     private int randlim;
@@ -28,16 +23,15 @@ public class Dice {
 
     }
 
-   public int rand(int a){
+    public int rand(int a) {
 
 
 
 
-            randlim=  generator.nextInt(a);
+        randlim = generator.nextInt(a);
 
-            return randlim + 1;
+        return randlim + 1;
 
 
     }
-
 }
