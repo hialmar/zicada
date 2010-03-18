@@ -59,7 +59,7 @@ public class Main {
             }
             if (line.contains("PRIVMSG " + channel + " :!weather")) {
                 XMLReader xml = new XMLReader();
-                String location = line.substring(line.indexOf("weather") + 7).replaceAll(" ", "%20");
+                String location = line.substring(line.indexOf("weather") + 7);
                 String[] result = xml.parseData(location);
                 writer.write("PRIVMSG " + channel + " :Location: " + result[0]
                         + ", Temp: " + result[1] + "C" + ", " + result[2]
