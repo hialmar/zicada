@@ -72,7 +72,7 @@ public class Main {
                 writer.write("PRIVMSG " + channel + " :" + google.search(query) + "\r\n");
                 writer.flush();
             }
-                if (line.contains("PRIVMSG " + channel + " :!tlf")) {
+            if (line.contains("PRIVMSG " + channel + " :!tlf")) {
                 TelefonKatalogen tlf = new TelefonKatalogen();
                 String query = line.substring(line.indexOf("tlf") + 3);
                 writer.write("PRIVMSG " + channel + " :" + tlf.getNumber(query) + "\r\n");

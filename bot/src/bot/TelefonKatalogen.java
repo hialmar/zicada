@@ -24,7 +24,7 @@ public class TelefonKatalogen {
                 String number = numberElement.getRenderer().toString().replaceAll("\\n", "").replaceAll("\\r", "").trim().substring(0, 11);
                 String address = addressElement.getRenderer().toString().replaceAll("\\n", "").replaceAll("\\r", "").trim();
                 String name = nameElement.getRenderer().toString().replaceAll("\\n", "").replaceAll("\\r", "");
-                return number + ", " + name.substring(1, name.indexOf("MER")) + "," + address;
+                return number + ", " + name.substring(1, name.indexOf("MER")-1) + ", " + address;
             }
         }
     }
