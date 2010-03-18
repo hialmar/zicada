@@ -5,28 +5,27 @@ import java.net.*;
 
 public class TelefonKatalogen {
 
-    public String getAddress(String query) throws Exception {
+    public String getNumber(String query) throws Exception {
+        if (query.isEmpty()) {
+            return "Usage: !tlf <name/number/address>";
+        } else {
+            // Encode norwegian characters
+            String sourceUrlString = "http://www.gulesider.no/tk/search.c?q=" + query.toLowerCase().replaceAll(" ", "%20").replaceAll("ø", "%F8").replaceAll("æ", "%E6").replaceAll("å", "%E5");
+            Source source = new Source(new URL(sourceUrlString).openStream());
+            // Parse the entire page right away.
+            source.fullSequentialParse();
 
-        String sourceUrlString = "http://www.gulesider.no/tk/search.c?q=" + query;
-        Source source = new Source(new URL(sourceUrlString).openStream());
-        // Parse the entire page right away.
-        source.fullSequentialParse();
-        // The first search result is in the class named "r".
-        Element firstResultElement = source.getFirstElementByClass("address");
-        // Fetch it and remove all the annoying newline characters and clean up.
-        return firstResultElement.getRenderer().toString().replaceAll("\\n", "").replaceAll("\\r", "");
+            Element numberElement = source.getFirstElementByClass("number");
+            Element addressElement = source.getFirstElementByClass("address");
+            Element nameElement = source.getFirstElementByClass("name");
+            if (source.getTextExtractor().setIncludeAttributes(true).toString().contains("ingen treff")) {
+                return "No results available";
+            } else {
+                String number = numberElement.getRenderer().toString().replaceAll("\\n", "").replaceAll("\\r", "").trim().substring(0, 11);
+                String address = addressElement.getRenderer().toString().replaceAll("\\n", "").replaceAll("\\r", "").trim();
+                String name = nameElement.getRenderer().toString().replaceAll("\\n", "").replaceAll("\\r", "");
+                return number + ", " + name.substring(1, name.indexOf("MER")) + "," + address;
+            }
+        }
     }
-
-        public String getNumber(String query) throws Exception {
-        String sourceUrlString = "http://www.gulesider.no/tk/search.c?q=" + query.replaceAll(" ", "+");
-        Source source = new Source(new URL(sourceUrlString).openStream());
-        // Parse the entire page right away.
-        source.fullSequentialParse();
-        // The first search result is in the class named "r".
-        Element firstResultElement = source.getFirstElementByClass("number");
-        // Fetch it and remove all the annoying newline characters and clean up.
-        String result = firstResultElement.getRenderer().toString().replaceAll("\\n", "").replaceAll("\\r", "");
-        return result.substring(0, 12);
-    }
-
 }

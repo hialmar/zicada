@@ -12,7 +12,7 @@ package bot;
 public class Googletest {
     public static void main(String[] args)throws Exception{
         TelefonKatalogen test = new TelefonKatalogen();
-        System.out.println(test.getAddress("98062995"));
-        System.out.println(test.getNumber("svein arne forn"));
+        System.out.println(test.getNumber("benjamin sørlie ormset"));
+
     }
 }

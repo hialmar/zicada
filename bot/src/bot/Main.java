@@ -11,11 +11,11 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         // The server to connect to and our details.
-        String server = "irc.homelien.no";
+        String server = "irc.sorcery.net";
         int port = 6667;
         String nick = "zicbot";
         String login = "zicbot";
-        String channel = "#zictest";
+        String channel = "#alfa";
 
         // Connect directly to the IRC server over socket, using buffered reads
         // and writes.
@@ -59,7 +59,7 @@ public class Main {
             }
             if (line.contains("PRIVMSG " + channel + " :!weather")) {
                 XMLReader xml = new XMLReader();
-                String location = line.substring(line.indexOf("weather") + 8).replaceAll(" ", "%20");
+                String location = line.substring(line.indexOf("weather") + 7).replaceAll(" ", "%20");
                 String[] result = xml.parseData(location);
                 writer.write("PRIVMSG " + channel + " :Location: " + result[0]
                         + ", Temp: " + result[1] + "C" + ", " + result[2]
@@ -68,20 +68,14 @@ public class Main {
             }
             if (line.contains("PRIVMSG " + channel + " :!google")) {
                 Google google = new Google();
-                String query = line.substring(line.indexOf("google") + 7);
+                String query = line.substring(line.indexOf("google") + 6);
                 writer.write("PRIVMSG " + channel + " :" + google.search(query) + "\r\n");
                 writer.flush();
             }
                 if (line.contains("PRIVMSG " + channel + " :!tlf")) {
                 TelefonKatalogen tlf = new TelefonKatalogen();
-                String query = line.substring(line.indexOf("tlf") + 4);
+                String query = line.substring(line.indexOf("tlf") + 3);
                 writer.write("PRIVMSG " + channel + " :" + tlf.getNumber(query) + "\r\n");
-                writer.flush();
-            }
-                if (line.contains("PRIVMSG " + channel + " :!addr")) {
-                TelefonKatalogen tlf = new TelefonKatalogen();
-                String query = line.substring(line.indexOf("addr") + 5);
-                writer.write("PRIVMSG " + channel + " :" + tlf.getAddress(query) + "\r\n");
                 writer.flush();
             }
         }
