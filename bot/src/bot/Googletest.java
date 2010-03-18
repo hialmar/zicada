@@ -11,7 +11,8 @@ package bot;
  */
 public class Googletest {
     public static void main(String[] args)throws Exception{
-        Google test = new Google();
-        System.out.println(test.search("penis"));
+        TelefonKatalogen test = new TelefonKatalogen();
+        System.out.println(test.getAddress("98062995"));
+        System.out.println(test.getNumber("svein arne forn"));
     }
 }

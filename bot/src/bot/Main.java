@@ -13,7 +13,7 @@ public class Main {
         // The server to connect to and our details.
         String server = "irc.homelien.no";
         int port = 6667;
-        String nick = "zicbot2";
+        String nick = "zicbot";
         String login = "zicbot";
         String channel = "#zictest";
 
@@ -70,6 +70,18 @@ public class Main {
                 Google google = new Google();
                 String query = line.substring(line.indexOf("google") + 7);
                 writer.write("PRIVMSG " + channel + " :" + google.search(query) + "\r\n");
+                writer.flush();
+            }
+                if (line.contains("PRIVMSG " + channel + " :!tlf")) {
+                TelefonKatalogen tlf = new TelefonKatalogen();
+                String query = line.substring(line.indexOf("tlf") + 4);
+                writer.write("PRIVMSG " + channel + " :" + tlf.getNumber(query) + "\r\n");
+                writer.flush();
+            }
+                if (line.contains("PRIVMSG " + channel + " :!addr")) {
+                TelefonKatalogen tlf = new TelefonKatalogen();
+                String query = line.substring(line.indexOf("addr") + 5);
+                writer.write("PRIVMSG " + channel + " :" + tlf.getAddress(query) + "\r\n");
                 writer.flush();
             }
         }
