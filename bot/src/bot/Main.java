@@ -47,7 +47,7 @@ public class Main {
         writer.flush();
 
         // Keep reading lines from the server.
-        // We should call all functionality from this loop.
+        // We should call all !irc commands from this loop.
         while ((line = reader.readLine()) != null) {
             if (line.startsWith("PING ")) {
                 // We must respond to PINGs to avoid being disconnected.
@@ -57,6 +57,7 @@ public class Main {
                 // Print the raw line received by the Main.
                 System.out.println(line);
             }
+
             if (line.contains("PRIVMSG " + channel + " :!weather")) {
                 XMLReader xml = new XMLReader();
                 String location = line.substring(line.indexOf("weather") + 7);
@@ -66,16 +67,18 @@ public class Main {
                         + " " + result[3] + "\r\n");
                 writer.flush();
             }
+
             if (line.contains("PRIVMSG " + channel + " :!google")) {
                 Google google = new Google();
                 String query = line.substring(line.indexOf("google") + 6);
                 writer.write("PRIVMSG " + channel + " :" + google.search(query) + "\r\n");
                 writer.flush();
             }
+
             if (line.contains("PRIVMSG " + channel + " :!tlf")) {
                 TelefonKatalogen tlf = new TelefonKatalogen();
                 String query = line.substring(line.indexOf("tlf") + 3);
-                writer.write("PRIVMSG " + channel + " :" + tlf.getNumber(query) + "\r\n");
+                writer.write("PRIVMSG " + channel + " :" + tlf.getTlfData(query) + "\r\n");
                 writer.flush();
             }
         }

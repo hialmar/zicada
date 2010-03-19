@@ -1,6 +1,7 @@
 package bot;
 
 public class HelperClass {
+
     public String htmlEnc(String query){
         return query.toLowerCase().replaceAll(" ", "%20")
                                   .replaceAll("\\+", "%2b")
@@ -9,7 +10,7 @@ public class HelperClass {
                                   .replaceAll("å", "%E5");
 
     }
-        public String stripNewLine(String query){
+    public String stripNewLine(String query){
         return query.toLowerCase().replaceAll("\\n", " ")
                                   .replaceAll("<", "")
                                   .replaceAll(">", "")
