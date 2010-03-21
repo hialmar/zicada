@@ -9,7 +9,7 @@ import java.net.Socket;
 public class Main {
 
     private String server;
-    private int port;
+    private String port;
     private String nick;
     private String login;
     private String channel;
@@ -22,7 +22,6 @@ public class Main {
     TelefonKatalogen tlf;
 
     public void start() throws Exception {
-        setConfig("irc.homelien.no", 6667, "zicbot", "zicbot", "#zictest");
         connect();
         login();
         joinChan(channel);
@@ -30,10 +29,18 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        new Main().start();
+        // start an instance of ourselves so we're not static anymore
+        Main main = new Main();
+        if(args.length == 0){
+            System.err.println("Using default arguments \n Usage: java -jar bot servername port nickname username channel");
+            main.setConfig("irc.homelien.no", "6667", "zicbot", "zicbot", "#zictest");
+        } else {
+            main.setConfig(args[0], args[1], args[2], args[3], "#"+ args[4]);
+        }
+        main.start();
     }
 
-    private void setConfig(String server, int port, String nick, String login, String channel) {
+    private void setConfig(String server, String port, String nick, String login, String channel) {
         this.server = server;
         this.port = port;
         this.nick = nick;
@@ -42,7 +49,7 @@ public class Main {
     }
 
     public void connect() throws Exception {
-        socket = new Socket(server, port);
+        socket = new Socket(server, Integer.parseInt(port));
         writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
