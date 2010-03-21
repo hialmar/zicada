@@ -23,7 +23,7 @@ public class Google {
 
             // The first search result is in the class named "r".
             Element firstResultElement = source.getFirstElementByClass("r");
-            // Fetch it and remove all the annoying newline characters.
+            // Fetch it and remove all the annoying newline characters by using the HelperClass.
             return helper.stripNewLine(firstResultElement.getRenderer().toString());
         }
     }

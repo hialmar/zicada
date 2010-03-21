@@ -8,30 +8,52 @@ import java.net.Socket;
 
 public class Main {
 
+    private String server;
+    private int port;
+    private String nick;
+    private String login;
+    private String channel;
+    private String line;
+    Socket socket;
+    BufferedReader reader;
+    BufferedWriter writer;
+    XMLReader xml;
+    Google google;
+    TelefonKatalogen tlf;
+
+    public void start() throws Exception {
+        setConfig("irc.homelien.no", 6667, "zicbot", "zicbot", "#zictest");
+        connect();
+        login();
+        joinChan(channel);
+        run();
+    }
+
     public static void main(String[] args) throws Exception {
+        new Main().start();
+    }
 
-        // The server to connect to and our details.
-        String server = "irc.sorcery.net";
-        int port = 6667;
-        String nick = "zicbot";
-        String login = "zicbot";
-        String channel = "#alfa";
+    private void setConfig(String server, int port, String nick, String login, String channel) {
+        this.server = server;
+        this.port = port;
+        this.nick = nick;
+        this.login = login;
+        this.channel = channel;
+    }
 
-        // Connect directly to the IRC server over socket, using buffered reads
-        // and writes.
-        Socket socket = new Socket(server, port);
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-                socket.getOutputStream()));
-        BufferedReader reader = new BufferedReader(new InputStreamReader(
-                socket.getInputStream()));
+    public void connect() throws Exception {
+        socket = new Socket(server, port);
+        writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    }
 
-        // Log on to the server.
+    public void login() throws Exception {
+
         writer.write("NICK " + nick + "\r\n");
         writer.write("USER " + login + " 8 * : Java IRC Bot Project\r\n");
         writer.flush();
 
         // Read lines from the server until it tells us we have connected.
-        String line = null;
         while ((line = reader.readLine()) != null) {
             if (line.indexOf("004") >= 0) {
                 // We are now logged in.
@@ -41,46 +63,61 @@ public class Main {
                 return;
             }
         }
+    }
 
-        // Join the channel.
+    public void joinChan(String channel) throws Exception {
         writer.write("JOIN " + channel + "\r\n");
         writer.flush();
+    }
 
-        // Keep reading lines from the server.
-        // We should call all !irc commands from this loop.
+    public void keepAlive() throws Exception {
+        if (line.startsWith("PING ")) {
+            // We must respond to PINGs to avoid being disconnected.
+            writer.write("PONG " + line.substring(5) + "\r\n");
+            writer.flush();
+        } else {
+            // Print the raw line received by the Main.
+            System.out.println(line);
+        }
+    }
+
+    public void weather() throws Exception {
+        if (line.contains("PRIVMSG " + channel + " :!weather")) {
+            xml = new XMLReader();
+            String location = line.substring(line.indexOf("weather") + 7);
+            String[] result = xml.parseData(location);
+            writer.write("PRIVMSG " + channel + " :Location: " + result[0]
+                    + ", Temp: " + result[1] + "C" + ", " + result[2]
+                    + " " + result[3] + "\r\n");
+            writer.flush();
+        }
+    }
+
+    public void google() throws Exception {
+        System.setProperty("http.agent", "Lynx/2.8.5rel.1 libwww-FM/2.14 SSL-MM/1.4.1 GNUTLS/1.4.4");
+        if (line.contains("PRIVMSG " + channel + " :!google")) {
+            google = new Google();
+            String query = line.substring(line.indexOf("google") + 6);
+            writer.write("PRIVMSG " + channel + " :" + google.search(query) + "\r\n");
+            writer.flush();
+        }
+    }
+
+    public void telefonKatalogen() throws Exception {
+        if (line.contains("PRIVMSG " + channel + " :!tlf")) {
+            tlf = new TelefonKatalogen();
+            String query = line.substring(line.indexOf("tlf") + 3);
+            writer.write("PRIVMSG " + channel + " :" + tlf.getTlfData(query) + "\r\n");
+            writer.flush();
+        }
+    }
+
+    public void run() throws Exception {
         while ((line = reader.readLine()) != null) {
-            if (line.startsWith("PING ")) {
-                // We must respond to PINGs to avoid being disconnected.
-                writer.write("PONG " + line.substring(5) + "\r\n");
-                writer.flush();
-            } else {
-                // Print the raw line received by the Main.
-                System.out.println(line);
-            }
-
-            if (line.contains("PRIVMSG " + channel + " :!weather")) {
-                XMLReader xml = new XMLReader();
-                String location = line.substring(line.indexOf("weather") + 7);
-                String[] result = xml.parseData(location);
-                writer.write("PRIVMSG " + channel + " :Location: " + result[0]
-                        + ", Temp: " + result[1] + "C" + ", " + result[2]
-                        + " " + result[3] + "\r\n");
-                writer.flush();
-            }
-
-            if (line.contains("PRIVMSG " + channel + " :!google")) {
-                Google google = new Google();
-                String query = line.substring(line.indexOf("google") + 6);
-                writer.write("PRIVMSG " + channel + " :" + google.search(query) + "\r\n");
-                writer.flush();
-            }
-
-            if (line.contains("PRIVMSG " + channel + " :!tlf")) {
-                TelefonKatalogen tlf = new TelefonKatalogen();
-                String query = line.substring(line.indexOf("tlf") + 3);
-                writer.write("PRIVMSG " + channel + " :" + tlf.getTlfData(query) + "\r\n");
-                writer.flush();
-            }
+            keepAlive();
+            weather();
+            google();
+            telefonKatalogen();
         }
     }
 }
