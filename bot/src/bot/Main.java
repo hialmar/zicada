@@ -21,7 +21,7 @@ public class Main {
     Google google;
     TelefonKatalogen tlf;
 
-    public void start() throws Exception {
+    public void initialize() throws Exception {
         connect();
         login();
         joinChan(channel);
@@ -37,7 +37,7 @@ public class Main {
         } else {
             main.setConfig(args[0], args[1], args[2], args[3], "#"+ args[4]);
         }
-        main.start();
+        main.initialize();
     }
 
     private void setConfig(String server, String port, String nick, String login, String channel) {
@@ -120,6 +120,7 @@ public class Main {
     }
 
     public void run() throws Exception {
+        // this is the main run loop
         while ((line = reader.readLine()) != null) {
             keepAlive();
             weather();

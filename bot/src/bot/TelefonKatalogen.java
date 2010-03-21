@@ -5,6 +5,9 @@ import java.net.*;
 
 public class TelefonKatalogen {
 
+    private String name;
+    private String number;
+    private String address;
     HelperClass helper = new HelperClass();
 
     public String getTlfData(String query) throws Exception {
@@ -19,23 +22,33 @@ public class TelefonKatalogen {
             // Parse the entire page right away.
             source.fullSequentialParse();
 
-            Element numberElement = source.getFirstElementByClass("number");
-            Element addressElement = source.getFirstElementByClass("address");
-            Element nameElement = source.getFirstElementByClass("name");
-
             // Make sure we have anything to return
             if (source.getTextExtractor().setIncludeAttributes(true).toString().contains("ingen treff")) {
                 return "No results available";
+
+            // Handle things differently if we're sent to gule sider bedrift
+            } else if (source.getTextExtractor().setIncludeAttributes(true).toString().contains("Treff i firmanavn")) {
+
+                Element numberElement = source.getFirstElementByClass("mainTlf");
+                Element addressElement = source.getFirstElementByClass("mainAdr");
+
+                number = helper.stripNewLine(numberElement.getRenderer().toString());
+                address = helper.stripNewLine(addressElement.getRenderer().toString());
+                name = "Business";
+
+            // Default case, retrieve info
             } else {
+                Element numberElement = source.getFirstElementByClass("number");
+                Element addressElement = source.getFirstElementByClass("address");
+                Element nameElement = source.getFirstElementByClass("name");
 
-                // number and address tend to have \r and \n, strip using helper.
-                String number = helper.stripNewLine(numberElement.getRenderer().toString().substring(0, 12));
-                String address = helper.stripNewLine(addressElement.getRenderer().toString());
-                String name = nameElement.getRenderer().toString();
+                number = helper.stripNewLine(numberElement.getRenderer().toString().substring(0, 12));
+                address = helper.stripNewLine(addressElement.getRenderer().toString());
+                name = nameElement.getRenderer().toString();
+                name = name.substring(1, name.indexOf("MER") - 1);
 
-                // some formatting, could use improvement
-                return number + ", " + name.substring(1, name.indexOf("MER") - 1) + "," + address;
             }
+            return number + ", " + name + "," + address;
         }
     }
 }
