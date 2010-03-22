@@ -14,12 +14,12 @@ public class Main {
     private String login;
     private String channel;
     private String line;
-    Socket socket;
-    BufferedReader reader;
-    BufferedWriter writer;
-    XMLReader xml;
-    Google google;
-    TelefonKatalogen tlf;
+    private Socket socket;
+    private BufferedReader reader;
+    private BufferedWriter writer;
+    private XMLReader xml;
+    private Google google;
+    private TelefonKatalogen tlf;
 
     public void initialize() throws Exception {
         connect();
@@ -31,11 +31,13 @@ public class Main {
     public static void main(String[] args) throws Exception {
         // start an instance of ourselves so we're not static anymore
         Main main = new Main();
-        if(args.length == 0){
-            System.err.println("Using default arguments \n Usage: java -jar bot servername port nickname username channel");
+        if (args.length == 0) {
+            System.err.println("Using default arguments \n " +
+                    "Usage: java -jar bot servername port nickname username channel");
+
             main.setConfig("irc.homelien.no", "6667", "zicbot", "zicbot", "#zictest");
         } else {
-            main.setConfig(args[0], args[1], args[2], args[3], "#"+ args[4]);
+            main.setConfig(args[0], args[1], args[2], args[3], "#" + args[4]);
         }
         main.initialize();
     }

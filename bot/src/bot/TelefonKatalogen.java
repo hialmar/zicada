@@ -26,7 +26,7 @@ public class TelefonKatalogen {
             if (source.getTextExtractor().setIncludeAttributes(true).toString().contains("ingen treff")) {
                 return "No results available";
 
-            // Handle things differently if we're sent to gule sider bedrift
+                // Handle things differently if we're sent to gule sider bedrift
             } else if (source.getTextExtractor().setIncludeAttributes(true).toString().contains("Treff i firmanavn")) {
 
                 Element numberElement = source.getFirstElementByClass("mainTlf");
@@ -36,7 +36,7 @@ public class TelefonKatalogen {
                 address = helper.stripNewLine(addressElement.getRenderer().toString());
                 name = "Business";
 
-            // Default case, retrieve info
+                // Default case, retrieve info
             } else {
                 Element numberElement = source.getFirstElementByClass("number");
                 Element addressElement = source.getFirstElementByClass("address");
