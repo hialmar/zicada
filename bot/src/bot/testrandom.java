@@ -16,41 +16,52 @@ public class testrandom {
 
 
         // example of what the input from IRC would look like
-        String input = "!roll d6d6+3";
+        String input = "!roll d1d6+2";
+        int length = input.length();
 
-        
 
         // fetching the parts wanted from the input
-       
+
         // Number of eyes on the dice
-        String dProp1 = input.substring(7,8);
+        String dProp1 = input.substring(7, 8);
         // Number of time the dice is rolled
-        String dProp2 = input.substring(9,10);
+        String dProp2 = input.substring(9, 10);
         // Dice bonus. If it is +2, then when the scrip rolls 4, it will come out as 6.
-        String dProp3 = input.substring(11,12);
+        //String dProp3 = input.substring(11, 12);
 
 
         // Parsing the strings.
         int a = Integer.parseInt(dProp1);
         int b = Integer.parseInt(dProp2);
-        int x = Integer.parseInt(dProp3);
+       // int x = Integer.parseInt(dProp3);
         int c = 1;
 
         // Rolling the dice, then appending the results to the result string.
-       String result = "";
-        for (int i = b; i > 0; i--) {
+        String result = "";
 
-            Dice rand = new Dice();
+        if (length >= 12) {
+            String dProp3 = input.substring(11, 12);
+            int x = Integer.parseInt(dProp3);
+            for (int i = b; i > 0; i--) {
 
+                Dice rand = new Dice();
+                String lol = ("Roll " + c + ": " + rand.rand(a, x) + "\n");
+                c++;
+                result += lol;
 
-            String lol =  ("Roll " + c + ": " + rand.rand(a, x) + "\n");
-            c++;
-
-            result += lol;
-
+            }
+            //This script is run if the lenght of the input is
         }
 
-       // Prints out what has been appended to result.
-       System.out.println(result);
+        if (length <=11){
+            for (int i = b; i > 0; i--) {
+
+                Dice rand = new Dice();
+                String lol = ("Roll " + c + ": " + rand.rand(a, 0) + "\n");
+                c++;
+                result += lol;
+            }
+        }
+        System.out.println(result);
     }
 }
