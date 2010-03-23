@@ -43,7 +43,7 @@ public class testrandom {
             Dice rand = new Dice();
 
 
-            String lol =  ("Roll " + c + ": " + rand.rand(a, 0) + "\n");
+            String lol =  ("Roll " + c + ": " + rand.rand(a, x) + "\n");
             c++;
 
             result += lol;
