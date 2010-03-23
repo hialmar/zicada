@@ -23,14 +23,13 @@ public class Dice {
 
     }
 
-    public int rand(int a) {
 
-
+    public int rand(int a, int b) {
 
 
         randlim = generator.nextInt(a);
 
-        return randlim + 1;
+        return randlim + 1 + b;
 
 
     }
