@@ -59,8 +59,7 @@ public class XMLReader {
     }
 
     public String[] parseData(String city) throws MalformedURLException {
-        HelperClass helper = new HelperClass();
-        city = helper.htmlEnc(city);
+        city = HelperClass.htmlEnc(city);
         URL url = new URL("http://www.google.com/ig/api?weather=" + city);
         String[] resultArray = new String[4];
         try {

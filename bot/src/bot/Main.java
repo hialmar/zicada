@@ -35,7 +35,7 @@ public class Main {
             System.err.println("Using default arguments \n " +
                     "Usage: java -jar bot servername port nickname username channel");
 
-            main.setConfig("irc.homelien.no", "6667", "zicbot", "zicbot", "#zictest");
+            main.setConfig("irc.homelien.no", "6667", "zicbot2", "zicbot", "#planet.e");
         } else {
             main.setConfig(args[0], args[1], args[2], args[3], "#" + args[4]);
         }

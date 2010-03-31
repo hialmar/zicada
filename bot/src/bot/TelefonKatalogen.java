@@ -8,14 +8,13 @@ public class TelefonKatalogen {
     private String name;
     private String number;
     private String address;
-    HelperClass helper = new HelperClass();
 
     public String getTlfData(String query) throws Exception {
 
         if (query.isEmpty()) {
             return "Usage: !tlf <name/number/address>";
         } else {
-            query = helper.htmlEnc(query);
+            query = HelperClass.htmlEnc(query);
             String sourceUrlString = "http://www.gulesider.no/tk/search.c?q=" + query;
             Source source = new Source(new URL(sourceUrlString).openStream());
 
@@ -32,8 +31,8 @@ public class TelefonKatalogen {
                 Element numberElement = source.getFirstElementByClass("mainTlf");
                 Element addressElement = source.getFirstElementByClass("mainAdr");
 
-                number = helper.stripNewLine(numberElement.getRenderer().toString());
-                address = helper.stripNewLine(addressElement.getRenderer().toString());
+                number = HelperClass.stripNewLine(numberElement.getRenderer().toString());
+                address = HelperClass.stripNewLine(addressElement.getRenderer().toString());
                 name = "Business";
 
                 // Default case, retrieve info
@@ -42,8 +41,8 @@ public class TelefonKatalogen {
                 Element addressElement = source.getFirstElementByClass("address");
                 Element nameElement = source.getFirstElementByClass("name");
 
-                number = helper.stripNewLine(numberElement.getRenderer().toString().substring(0, 12));
-                address = helper.stripNewLine(addressElement.getRenderer().toString());
+                number = HelperClass.stripNewLine(numberElement.getRenderer().toString().substring(0, 12));
+                address = HelperClass.stripNewLine(addressElement.getRenderer().toString());
                 name = nameElement.getRenderer().toString();
                 name = name.substring(1, name.indexOf("MER") - 1);
 
