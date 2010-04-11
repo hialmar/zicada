@@ -33,4 +33,23 @@ public class Dice {
 
 
     }
+
+    
+    public String test(int a, int b, int c) {
+
+         String result = "";
+         for (int i = b; i > 0; i--) {
+
+                Dice rand = new Dice();
+                String lol = ("Roll " + c + ": " + rand.rand(a, 0) + "\n");
+                c++;
+                result += lol;
+                return result;
+              
+                
+
+    }
 }
+}
+
+                
