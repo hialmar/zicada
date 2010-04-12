@@ -4,8 +4,6 @@
  */
 package bot;
 
-import javax.swing.JOptionPane;
-
 /**
  *
  * @author b9
@@ -14,54 +12,46 @@ public class testrandom {
 
     public static void main(String[] args) {
 
+        //example of input. the + can also be -
+        String input = "!roll d5d6+2";
 
-        // example of what the input from IRC would look like
-        String input = "!roll d1d6+2";
-        int length = input.length();
+        //checks wether the string contains "+" or "-" then changes it to a "d".
+        if (input.contains("+")) {
+            input = input.replaceAll("[+]", "d");
+            //splits the string at d's.
+            String[] res = input.split("d");
+            // Parsing the strings.
+            int a = Integer.parseInt(res[1]);
+            int b = Integer.parseInt(res[2]);
+            int c = Integer.parseInt(res[3]);
+            //creating dice object
+            Dice diceObject = new Dice();
+            //runs the method using the user input and returns
+            //the result to the string named result.
+            String result = diceObject.test(a, b, c);
+            System.out.println(result);
 
+            //same as the if test above, but in this instance the string contains a "-".
+        } else if (input.contains("-")) {
+            input = input.replaceAll("-", "d-");
+            String[] res = input.split("d");
+            int a = Integer.parseInt(res[1]);
+            int b = Integer.parseInt(res[2]);
+            int c = Integer.parseInt(res[3]);
+            Dice diceObject = new Dice();
+            String result = diceObject.test(a, b, c);
+            System.out.println(result);
 
-        // fetching the parts wanted from the input
-
-        // Number of eyes on the dice
-        String dProp1 = input.substring(7, 8);
-        // Number of time the dice is rolled
-        String dProp2 = input.substring(9, 10);
-        // Dice bonus. If it is +2, then when the scrip rolls 4, it will come out as 6.
-        //String dProp3 = input.substring(11, 12);
-
-
-        // Parsing the strings.
-        int a = Integer.parseInt(dProp1);
-        int b = Integer.parseInt(dProp2);
-       // int x = Integer.parseInt(dProp3);
-        int c = 1;
-
-        // Rolling the dice, then appending the results to the result string.
-        String result = "";
-
-        if (length >= 12) {
-            String dProp3 = input.substring(11, 12);
-            int x = Integer.parseInt(dProp3);
-            for (int i = b; i > 0; i--) {
-
-                Dice rand = new Dice();
-                String lol = ("Roll " + c + ": " + rand.rand(a, x) + "\n");
-                c++;
-                result += lol;
-
-            }
-            //This script is run if the lenght of the input is
+            //this code is run in cases where there is no "+" or "-" in the input.
+        } else {
+            String[] res = input.split("d");
+            int a = Integer.parseInt(res[1]);
+            int b = Integer.parseInt(res[2]);
+            int c = 0;
+            Dice diceObject = new Dice();
+            String result = diceObject.test(a, b, c);
+            System.out.println(result);
         }
 
-        if (length <=11){
-            for (int i = b; i > 0; i--) {
-
-                Dice rand = new Dice();
-                String lol = ("Roll " + c + ": " + rand.rand(a, 0) + "\n");
-                c++;
-                result += lol;
-            }
-        }
-        System.out.println(result);
     }
 }
