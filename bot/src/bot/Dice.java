@@ -16,40 +16,25 @@ public class Dice {
     private int randlim;
 
     public Dice() {
-
-
         generator = new Random();
-
-
     }
-
 
     public int rand(int a, int b) {
-
-
         randlim = generator.nextInt(a);
-
         return randlim + 1 + b;
-
-
     }
 
-    
     public String test(int a, int b, int c) {
-
-         String result = "";
-         for (int i = b; i > 0; i--) {
-
-                Dice rand = new Dice();
-                String lol = ("Roll " + c + ": " + rand.rand(a, 0) + "\n");
-                c++;
-                result += lol;
-                return result;
-              
-                
-
+        String result = "";
+        for (int i = b; i > 0; i--) {
+            int x = 1;
+            Dice rand = new Dice();
+            String lol = ("Roll " + x + ": " + rand.rand(a, c) + "\n");
+            x++;
+            result += lol;
+        }
+        return result;
     }
-}
 }
 
                 
