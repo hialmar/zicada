@@ -1,5 +1,7 @@
 package bot;
 
+import java.io.IOException;
+
 public class Main {
 
 	public static void main(String[] args) throws Exception {
@@ -14,7 +16,12 @@ public class Main {
 		} else {
 			irc.setConfig(args[0], args[1], args[2], args[3], "#" + args[4]);
 		}
-		irc.initialize();
+		try {
+			irc.initialize();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+		
 	}
 
 }

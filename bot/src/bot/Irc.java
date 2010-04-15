@@ -2,6 +2,7 @@ package bot;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
@@ -34,12 +35,16 @@ public class Irc {
 		commands.add("!google");
 		commands.add("!tlf");
 		commands.add("!weather");
+		try {
+			connect();
+			login();
+			joinChan(channel);
+			joinChan("#zicTest2");
+			run();
+		} catch (IOException e){
+			System.out.println(e.getMessage());
+		}
 
-		connect();
-		login();
-		joinChan(channel);
-		joinChan("#zicTest2");
-		run();
 	}
 
 	public void setConfig(String server, String port, String nick,
@@ -52,52 +57,77 @@ public class Irc {
 	}
 
 	public void connect() throws Exception {
-		socket = new Socket(server, Integer.parseInt(port));
-		writer = new BufferedWriter(new OutputStreamWriter(socket
-				.getOutputStream()));
-		reader = new BufferedReader(new InputStreamReader(socket
-				.getInputStream()));
+		try {
+			socket = new Socket(server, Integer.parseInt(port));
+			writer = new BufferedWriter(new OutputStreamWriter(socket
+					.getOutputStream()));
+			reader = new BufferedReader(new InputStreamReader(socket
+					.getInputStream()));
+		} catch (IOException e){
+			System.out.println(e.getMessage());
+		}
+
 	}
 
 	public void login() throws Exception {
-		writer.write("NICK " + nick + "\r\n");
-		writer.write("USER " + login + " 8 * : Java IRC Bot Project\r\n");
-		writer.flush();
+		try{
+			writer.write("NICK " + nick + "\r\n");
+			writer.write("USER " + login + " 8 * : Java IRC Bot Project\r\n");
+			writer.flush();
 
-		// Read lines from the server until it tells us we have connected.
-		while ((line = reader.readLine()) != null) {
-			if (line.indexOf("004") >= 0) {
-				// We are now logged in.
-				break;
-			} else if (line.indexOf("433") >= 0) {
-				System.out.println("Nickname is already in use.");
-				return;
+			// Read lines from the server until it tells us we have connected.
+			while ((line = reader.readLine()) != null) {
+				if (line.indexOf("004") >= 0) {
+					// We are now logged in.
+					break;
+				} else if (line.indexOf("433") >= 0) {
+					System.out.println("Nickname is already in use.");
+					return;
+				}
 			}
+		} catch (IOException e){
+			System.out.println(e.getMessage());
 		}
+
 	}
 
 	public void joinChan(String channel) throws Exception {
-		writer.write("JOIN " + channel + "\r\n");
-		writer.flush();
+		try {
+			writer.write("JOIN " + channel + "\r\n");
+			writer.flush();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+
 	}
 
 	public void keepAlive() throws Exception {
-		if (line.startsWith("PING ")) {
-			// We must respond to PINGs to avoid being disconnected.
-			writer.write("PONG " + line.substring(5) + "\r\n");
-			writer.flush();
-		} else {
-			// Print the raw line received by the Main.
-			System.out.println(line);
+		try {
+			if (line.startsWith("PING ")) {
+				// We must respond to PINGs to avoid being disconnected.
+				writer.write("PONG " + line.substring(5) + "\r\n");
+				writer.flush();
+			} else {
+				// Print the raw line received by the Main.
+				System.out.println(line);
+			}
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
 		}
+
 	}
 
 	public void run() throws Exception {
 		// this is the main run loop
-		while ((line = reader.readLine()) != null) {
-			keepAlive();
-			reader();
+		try {
+			while ((line = reader.readLine()) != null) {
+				keepAlive();
+				reader();
+			}
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
 		}
+
 	}
 
 	public Boolean isValid(String command) {
@@ -137,20 +167,29 @@ public class Irc {
 	}
 
 	public void reader() throws Exception {
-		if (getCommand().matches("!tlf")) {
-			writer.write("PRIVMSG " + getChan() + " :"
-					+ tlf.getTlfData(getArgument()) + "\r\n");
+		
+		try {
+			if (getCommand().matches("!tlf")) {
+				writer.write("PRIVMSG " + getChan() + " :"
+						+ tlf.getTlfData(getArgument()) + "\r\n");
+			}
+			if (getCommand().matches("!google")) {
+				writer.write("PRIVMSG " + getChan() + " :"
+						+ google.search(getArgument()) + "\r\n");
+			}
+			if (getCommand().matches("!weather")) {
+				String[] result = xml.parseData(getArgument());
+				writer.write("PRIVMSG " + getChan() + " :Location: " + result[0]
+						+ ", Temp: " + result[1] + "C" + ", " + result[2] + " "
+						+ result[3] + "\r\n");
+			}
+			writer.flush();
 		}
-		if (getCommand().matches("!google")) {
-			writer.write("PRIVMSG " + getChan() + " :"
-					+ google.search(getArgument()) + "\r\n");
+		catch(IOException e) {
+			System.out.println(e.getMessage());
+		} catch (Exception e){
+			System.out.println(e.getMessage());
 		}
-		if (getCommand().matches("!weather")) {
-			String[] result = xml.parseData(getArgument());
-			writer.write("PRIVMSG " + getChan() + " :Location: " + result[0]
-					+ ", Temp: " + result[1] + "C" + ", " + result[2] + " "
-					+ result[3] + "\r\n");
-		}
-		writer.flush();
+
 	}
 }

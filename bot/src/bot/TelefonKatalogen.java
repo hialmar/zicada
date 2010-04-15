@@ -1,6 +1,8 @@
 package bot;
 
 import net.htmlparser.jericho.*;
+
+import java.io.IOException;
 import java.net.*;
 
 public class TelefonKatalogen {
@@ -8,8 +10,9 @@ public class TelefonKatalogen {
 	private String name;
 	private String number;
 	private String address;
+	private Source source;
 
-	public String getTlfData(String query) throws Exception {
+	public String getTlfData(String query) throws IOException {
 
 		if (query.isEmpty()) {
 			return "Usage: !tlf <name/number/address>";
@@ -17,7 +20,12 @@ public class TelefonKatalogen {
 			query = HelperClass.htmlEnc(query);
 			String sourceUrlString = "http://www.gulesider.no/tk/search.c?q="
 					+ query;
-			Source source = new Source(new URL(sourceUrlString).openStream());
+			try {
+				source = new Source(new URL(sourceUrlString).openStream());
+
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+			}
 
 			// Parse the entire page right away.
 			source.fullSequentialParse();
