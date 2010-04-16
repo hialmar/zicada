@@ -1,9 +1,10 @@
 package bot;
 
-import net.htmlparser.jericho.*;
-
 import java.io.IOException;
-import java.net.*;
+import java.net.URL;
+
+import net.htmlparser.jericho.Element;
+import net.htmlparser.jericho.Source;
 
 public class TelefonKatalogen {
 

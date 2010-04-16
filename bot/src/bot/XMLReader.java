@@ -11,8 +11,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class XMLReader {
-	
-	private URL url;
 
 	public static final class SaxHandler extends DefaultHandler {
 
@@ -25,16 +23,16 @@ public class XMLReader {
 			return cityData;
 		}
 
+		public String getHumidityData() {
+			return humidityData;
+		}
+
 		public String getTempData() {
 			return tempData;
 		}
 
 		public String getWindData() {
 			return windData;
-		}
-
-		public String getHumidityData() {
-			return humidityData;
 		}
 
 		@Override
@@ -60,6 +58,8 @@ public class XMLReader {
 		}
 	}
 
+	private URL url;
+
 	public String[] parseData(String city) throws MalformedURLException {
 		city = HelperClass.htmlEnc(city);
 		try {
@@ -67,7 +67,7 @@ public class XMLReader {
 		} catch (MalformedURLException e) {
 			System.out.println(e.getMessage());
 		}
-		
+
 		String[] resultArray = new String[4];
 		try {
 			// creates and returns new instance of SAX-implementation:

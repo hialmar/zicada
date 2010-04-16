@@ -1,12 +1,14 @@
 package bot;
 
-import net.htmlparser.jericho.*;
-
 import java.io.IOException;
-import java.net.*;
+import java.net.URL;
+
+import net.htmlparser.jericho.Element;
+import net.htmlparser.jericho.Source;
 
 public class Google {
 	private Source source;
+
 	public String search(String query) throws IOException {
 		// Set a text-only browser USER_AGENT string, since google returns 443
 		// with the default java UA.
@@ -23,7 +25,7 @@ public class Google {
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 			}
-			
+
 			// Parse the entire page right away.
 			source.fullSequentialParse();
 
