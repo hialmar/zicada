@@ -25,6 +25,7 @@ public class Irc {
 	private TelefonKatalogen tlf;
 	private ArrayList<String> commands;
 	private ArrayList<String> admins;
+	private DbConnection players;
 
 	public void initialize() throws Exception {
 		System.setProperty("http.agent","Lynx/2.8.5rel.1 libwww-FM/2.14 SSL-MM/1.4.1 GNUTLS/1.4.4");
@@ -33,8 +34,9 @@ public class Irc {
 		tlf = new TelefonKatalogen();
 		commands = new ArrayList<String>();
 		admins = new ArrayList<String>();
+		players = new DbConnection("com.mysql.jdbc.Driver", "sql.alandfaraway.org", "alandsyu_live", "alandsyu_parser", "");
 		admins.add("zicada");
-		commands.add("!test");
+		commands.add("!players");
 		commands.add("!google");
 		commands.add("!tlf");
 		commands.add("!weather");
@@ -171,11 +173,9 @@ public class Irc {
 	public void reader() throws Exception {
 
 		try {
-
-			if (line.contains("JOIN :#") && !getNick().matches(botnick)){
-				writeMessage(getNick() + " came along");
+			if (getCommand().matches("!players")) {
+				writeMessage(players.getPlayers());
 			}
-
 			if (getCommand().matches("!join") && admins.contains(getNick())) {
 				joinChannel(getArgument());
 			}
