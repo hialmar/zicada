@@ -34,6 +34,7 @@ public class Irc {
 		tlf = new TelefonKatalogen();
 		commands = new ArrayList<String>();
 		admins = new ArrayList<String>();
+		players = new DbConnection("com.mysql.jdbc.Driver", "sql.alandfaraway.org", "alandsyu_live", "alandsyu_parser", "");
 		admins.add("zicada");
 		commands.add("!players");
 		commands.add("!google");
@@ -173,7 +174,6 @@ public class Irc {
 
 		try {
 			if (getCommand().matches("!players")) {
-				players = new DbConnection("com.mysql.jdbc.Driver", "sql.alandfaraway.org", "alandsyu_live", "alandsyu_parser", "");
 				writeMessage(players.getPlayers());
 			}
 			if (getCommand().matches("!join") && admins.contains(getNick())) {
