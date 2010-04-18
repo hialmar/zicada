@@ -32,6 +32,7 @@ public class Irc {
 		google = new Google();
 		tlf = new TelefonKatalogen();
 		commands = new ArrayList<String>();
+		admins = new ArrayList<String>();
 		admins.add("zicada");
 		commands.add("!google");
 		commands.add("!tlf");
@@ -41,7 +42,7 @@ public class Irc {
 		try {
 			connect();
 			login();
-			joinChan(channel);
+			joinChannel(channel);
 			run();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -56,7 +57,6 @@ public class Irc {
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
-
 	}
 
 	public String getArgument() {
@@ -84,19 +84,19 @@ public class Irc {
 	
 	public String getCommand() {
 		String[] command = new String[2];
-		if (line.contains("PRIVMSG " + getChan() + " :")) {
+		if (line.contains("PRIVMSG " + getChan() + " :!")) {
 			command = line.substring(line.lastIndexOf("!")).split(" ");
 		} else {
 			command[0] = "";
 		}
-		if (isValid(command[0])) {
+		if (isValidCommand(command[0])) {
 			return command[0];
 		} else {
 			return "";
 		}
 	}
 
-	public Boolean isValid(String command) {
+	public Boolean isValidCommand(String command) {
 		if (commands.contains(command)) {
 			return true;
 		} else {
@@ -104,7 +104,7 @@ public class Irc {
 		}
 	}
 
-	public void joinChan(String channel) throws Exception {
+	public void joinChannel(String channel) throws Exception {
 		try {
 			writer.write("JOIN " + channel + "\r\n");
 			writer.flush();
@@ -114,7 +114,7 @@ public class Irc {
 
 	}
 	
-	public void partChan(String channel) throws Exception {
+	public void partChannel(String channel) throws Exception {
 		try {
 			writer.write("PART " + channel + "\r\n");
 			writer.flush();
@@ -158,33 +158,32 @@ public class Irc {
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
-
+	}
+	
+	public void writeMessage(String message) throws Exception {
+		writer.write("PRIVMSG " + getChan() + " :" + message + "\r\n");
+		writer.flush();
 	}
 
 	public void reader() throws Exception {
 
 		try {
 			if (getCommand().matches("!join") && admins.contains(getNick())) {
-				joinChan(getArgument());
+				joinChannel(getArgument());
 			}
 			if (getCommand().matches("!part") && admins.contains(getNick())) {
-				partChan(getArgument());
+				partChannel(getArgument());
 			}
 			if (getCommand().matches("!tlf")) {
-				writer.write("PRIVMSG " + getChan() + " :"
-						+ tlf.getTlfData(getArgument()) + "\r\n");
+				writeMessage(tlf.getTlfData(getArgument()));
 			}
 			if (getCommand().matches("!google")) {
-				writer.write("PRIVMSG " + getChan() + " :"
-						+ google.search(getArgument()) + "\r\n");
+				writeMessage(google.search(getArgument()));
 			}
 			if (getCommand().matches("!weather")) {
-				String[] result = xml.parseData(getArgument());
-				writer.write("PRIVMSG " + getChan() + " :Location: "
-						+ result[0] + ", Temp: " + result[1] + "C" + ", "
-						+ result[2] + " " + result[3] + "\r\n");
+				writeMessage(xml.parseData(getArgument()));
 			}
-			writer.flush();
+			
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		} catch (Exception e) {

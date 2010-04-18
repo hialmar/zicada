@@ -11,6 +11,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class XMLReader {
+	
+	String result;
 
 	public static final class SaxHandler extends DefaultHandler {
 
@@ -60,15 +62,13 @@ public class XMLReader {
 
 	private URL url;
 
-	public String[] parseData(String city) throws MalformedURLException {
+	public String parseData(String city) throws MalformedURLException {
 		city = HelperClass.htmlEnc(city);
 		try {
 			url = new URL("http://www.google.com/ig/api?weather=" + city);
 		} catch (MalformedURLException e) {
 			System.out.println(e.getMessage());
 		}
-
-		String[] resultArray = new String[4];
 		try {
 			// creates and returns new instance of SAX-implementation:
 			SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -81,14 +81,13 @@ public class XMLReader {
 			// and parse:
 			parser.parse(url.openStream(), handler);
 			// store parsed data in array
-			resultArray[0] = handler.getCityData();
-			resultArray[1] = handler.getTempData();
-			resultArray[2] = handler.getWindData();
-			resultArray[3] = handler.getHumidityData();
+			
+			result = "Location: " + handler.getCityData() + ", Temp: " + handler.getTempData() + "C" + ", "
+			+ handler.getWindData() + " " + handler.getHumidityData();
 
 		} catch (Exception ex) {
 			ex.printStackTrace(System.out);
 		}
-		return resultArray;
+		return result;
 	}
 }
