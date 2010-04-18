@@ -12,10 +12,11 @@ public class Irc {
 
 	private String server;
 	private String port;
-	private String nick;
+	private String botnick;
 	private String login;
 	private String channel;
 	private String line;
+	private String nick;
 	private Socket socket;
 	private BufferedReader reader;
 	private BufferedWriter writer;
@@ -23,7 +24,7 @@ public class Irc {
 	private Google google;
 	private TelefonKatalogen tlf;
 	private ArrayList<String> commands;
-	private String admin;
+	private ArrayList<String> admins;
 
 	public void initialize() throws Exception {
 		System.setProperty("http.agent","Lynx/2.8.5rel.1 libwww-FM/2.14 SSL-MM/1.4.1 GNUTLS/1.4.4");
@@ -31,7 +32,7 @@ public class Irc {
 		google = new Google();
 		tlf = new TelefonKatalogen();
 		commands = new ArrayList<String>();
-		admin = "zicada";
+		admins.add("zicada");
 		commands.add("!google");
 		commands.add("!tlf");
 		commands.add("!weather");
@@ -71,7 +72,16 @@ public class Irc {
 		}
 		return channel;
 	}
-
+	
+	public String getNick() {
+		if (line.contains("PRIVMSG " + getChan() + " :")) {
+			nick = line.substring(line.indexOf(":")+1,line.indexOf("!")).trim();
+		} else {
+			return "";
+		}
+		return nick;
+	}
+	
 	public String getCommand() {
 		String[] command = new String[2];
 		if (line.contains("PRIVMSG " + getChan() + " :")) {
@@ -131,7 +141,7 @@ public class Irc {
 
 	public void login() throws Exception {
 		try {
-			writer.write("NICK " + nick + "\r\n");
+			writer.write("NICK " + botnick + "\r\n");
 			writer.write("USER " + login + " 8 * : Java IRC Bot Project\r\n");
 			writer.flush();
 
@@ -154,10 +164,10 @@ public class Irc {
 	public void reader() throws Exception {
 
 		try {
-			if (getCommand().matches("!join") && line.contains(admin)) {
+			if (getCommand().matches("!join") && admins.contains(getNick())) {
 				joinChan(getArgument());
 			}
-			if (getCommand().matches("!part") && line.contains(admin)) {
+			if (getCommand().matches("!part") && admins.contains(getNick())) {
 				partChan(getArgument());
 			}
 			if (getCommand().matches("!tlf")) {
@@ -200,7 +210,7 @@ public class Irc {
 			String login, String channel) {
 		this.server = server;
 		this.port = port;
-		this.nick = nick;
+		this.botnick = nick;
 		this.login = login;
 		this.channel = channel;
 	}
