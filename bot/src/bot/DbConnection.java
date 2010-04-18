@@ -31,34 +31,22 @@ public class DbConnection {
         return null;
     }
     
-    public String getPlayers(){
-        String sql = "SELECT Count(Name) AS bg_players FROM characters WHERE IsOnline = 1 AND ServerID = 10" ;
-        String sql2 = "SELECT Count(Name) AS tsm_players FROM characters WHERE IsOnline = 1 AND ServerID = 3" ;
-        Statement stmt = null;
-        Statement stmt2 = null;
-        ResultSet res = null;
-        ResultSet res2 = null;
+    public String getPlayers() {
         int tsm = 0;
         int bg = 0;
-        try {
-            stmt = connection.createStatement();
-            stmt2 = connection.createStatement();
-            res = stmt.executeQuery(sql);
-            res2 = stmt2.executeQuery(sql2);
-            
-            while(res.next()){
-            	bg = res.getInt("bg_players");
-            }
-            
-            while(res2.next()) {
-            	tsm = res2.getInt("tsm_players");
-            }
-            
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        int total = tsm + bg;
-        return "TSM: " + tsm + " BG: "+ bg + " Total: " + total;
+    	ResultSet tsmResult = runQuery("SELECT Count(Name) AS tsm_players FROM characters WHERE IsOnline = 1 AND ServerID = 3");
+    	ResultSet bgResult = runQuery("SELECT Count(Name) AS bg_players FROM characters WHERE IsOnline = 1 AND ServerID = 10");
+    	try {
+    		tsmResult.next();
+    		bgResult.next();
+			tsm = tsmResult.getInt("tsm_players");
+			bg = bgResult.getInt("bg_players");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		int total = tsm + bg;
+    	return "TSM: " + tsm + " BG: "+ bg + " Total: " + total;
+    	
     }
     
     public void closeConnection() throws SQLException {
