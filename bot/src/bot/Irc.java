@@ -34,8 +34,9 @@ public class Irc {
 		tlf = new TelefonKatalogen();
 		commands = new ArrayList<String>();
 		admins = new ArrayList<String>();
-		players = new DbConnection("com.mysql.jdbc.Driver", "sql.alandfaraway.org", "alandsyu_live", "alandsyu_parser", "");
+		players = new DbConnection("com.mysql.jdbc.Driver", "sql.alandfaraway.org", "alandsyu_live", "alandsyu_parser", "ATmdMx6J");
 		admins.add("zicada");
+                admins.add("b9");
 		commands.add("!players");
 		commands.add("!google");
 		commands.add("!tlf");
