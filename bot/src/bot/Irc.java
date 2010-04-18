@@ -34,6 +34,7 @@ public class Irc {
 		commands = new ArrayList<String>();
 		admins = new ArrayList<String>();
 		admins.add("zicada");
+		commands.add("!test");
 		commands.add("!google");
 		commands.add("!tlf");
 		commands.add("!weather");
@@ -65,26 +66,28 @@ public class Irc {
 		return arg;
 	}
 
-	public String getChan() {
+	public String getChannel() {
 		if (line.contains("PRIVMSG #")) {
-			channel = line.substring(line.indexOf("PRIVMSG") + 7,
+			channel = line.substring(line.indexOf("PRIVMSG")+7,
 					line.lastIndexOf(":")).trim();
+		} else if (line.contains("JOIN :#")) {
+			channel = line.substring(line.indexOf("JOIN :#")+6);
+		} else if (line.contains("PART #")) {
+			channel = line.substring(line.indexOf("PART #")+5);
 		}
 		return channel;
 	}
 	
 	public String getNick() {
-		if (line.contains("PRIVMSG " + getChan() + " :")) {
+		if (line.contains("PRIVMSG #") || line.contains("JOIN :#") || line.contains("PART #")) {
 			nick = line.substring(line.indexOf(":")+1,line.indexOf("!")).trim();
-		} else {
-			return "";
 		}
 		return nick;
 	}
 	
 	public String getCommand() {
 		String[] command = new String[2];
-		if (line.contains("PRIVMSG " + getChan() + " :!")) {
+		if (line.contains("PRIVMSG " + getChannel() + " :!")) {
 			command = line.substring(line.lastIndexOf("!")).split(" ");
 		} else {
 			command[0] = "";
@@ -147,7 +150,7 @@ public class Irc {
 
 			// Read lines from the server until it tells us we have connected.
 			while ((line = reader.readLine()) != null) {
-				if (line.indexOf("004") >= 0) {
+				if (line.indexOf("376") >= 0) {
 					// We are now logged in.
 					break;
 				} else if (line.indexOf("433") >= 0) {
@@ -161,13 +164,18 @@ public class Irc {
 	}
 	
 	public void writeMessage(String message) throws Exception {
-		writer.write("PRIVMSG " + getChan() + " :" + message + "\r\n");
+		writer.write("PRIVMSG " + getChannel() + " :" + message + "\r\n");
 		writer.flush();
 	}
 
 	public void reader() throws Exception {
 
 		try {
+
+			if (line.contains("JOIN :#") && !getNick().matches(botnick)){
+				writeMessage(getNick() + " came along");
+			}
+
 			if (getCommand().matches("!join") && admins.contains(getNick())) {
 				joinChannel(getArgument());
 			}
