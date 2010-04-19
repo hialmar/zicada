@@ -23,10 +23,6 @@ public class Google {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public String search(String query) throws IOException {
-		// Set a text-only browser USER_AGENT string, since google returns 443
-		// with the default java UA.
-		System.setProperty("http.agent",
-				"Lynx/2.8.5rel.1 libwww-FM/2.14 SSL-MM/1.4.1 GNUTLS/1.4.4");
 
 		if (query.isEmpty()) {
 			return "Usage: !google <query>";

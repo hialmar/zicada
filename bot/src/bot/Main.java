@@ -14,17 +14,21 @@ public class Main {
 	 * @throws Exception the exception
 	 */
 	public static void main(String[] args) {
+		Irc irc;
 		if (args.length != 5) {
 			System.err.println("Usage: java -jar bot servername port nickname username channel");
-//			irc = new Irc("irc.homelien.no", "6667", "zicbot", "zicbot", "#zictest");
-			System.exit(0);
+			irc = new Irc("irc.homelien.no", "6667", "zicbot", "zicbot", "#zictest");
+//			System.exit(0);
 		} else {
-			Irc irc = new Irc(args[0], args[1], args[2], args[3], "#" + args[4]);
-			try {
-				irc.initialize();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			irc = new Irc(args[0], args[1], args[2], args[3], "#" + args[4]);
 		}
+		irc.setAdmin("zicada");
+		irc.setAdmin("b9");
+		try {
+			irc.initialize();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 }
