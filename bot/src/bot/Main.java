@@ -1,34 +1,60 @@
 package bot;
 
+import java.io.FileInputStream;
+import java.util.Properties;
+
 /**
- * The Main Class
+ * The Main Class.
  */
 public class Main {
 
+	private Properties p;
+	private static String server;
+	private static String port;
+	private static String nick;
+	private static String user;
+	private static String[] admins;
+	private static String[] channels;
+
+	/**
+	 * Gets the config.
+	 * 
+	 * @return the config
+	 */
+	public void getConfig() {
+		try {
+			p = new Properties();
+			p.load(new FileInputStream("config.ini"));
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		server = p.getProperty("server");
+		port = p.getProperty("port");
+		nick = p.getProperty("nick");
+		user = p.getProperty("user");
+		admins = p.getProperty("admins").split(",");
+		channels = p.getProperty("channels").split(",");
+	}
+
 	/**
 	 * The main method.
-	 * This method simply checks for the right arguments and
-	 * instantiates an IRC object using them.
-	 *
-	 * @param args bot servername port nickname username channel
-	 * @throws Exception the exception
+	 * 
+	 * @param args
+	 *            the arguments
+	 * @throws Exception
+	 *             the exception
 	 */
-	public static void main(String[] args) {
-		Irc irc;
-		if (args.length != 5) {
-			System.err.println("Usage: java -jar bot servername port nickname username channel");
-			irc = new Irc("irc.homelien.no", "6667", "zicbot", "zicbot", "#zictest");
-//			System.exit(0);
-		} else {
-			irc = new Irc(args[0], args[1], args[2], args[3], "#" + args[4]);
-		}
-		irc.setAdmin("zicada");
-		irc.setAdmin("b9");
-		try {
-			irc.initialize();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public static void main(String[] args) throws Exception {
+		Main main = new Main();
+		main.getConfig();
+		Irc irc = new Irc(server, nick, port, user);
 
+		for (String admin : admins) {
+			irc.setAdmin(admin);
+		}
+		for (String channel : channels) {
+			irc.setChannel(channel);
+		}
+		irc.initialize();
 	}
 }

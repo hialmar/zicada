@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * The Class Irc. This is the main runtime class, with methods for every action
@@ -29,6 +30,7 @@ public class Irc {
 	private Google google;
 	private TelefonKatalogen tlf;
 	private ArrayList<String> commands;
+	private ArrayList<String> channels;
 	private ArrayList<String> admins;
 	private DbConnection players;
 	
@@ -39,11 +41,11 @@ public class Irc {
 	 * 
 	 * @param server
 	 *            The irc server to connect to
-	 * @param port
-	 *            The port, this is most commonly 6667
 	 * @param botnick
 	 *            The botnick. Varies in max length between the various
 	 *            networks. To be safe, stay below 8 characters
+	 * @param port
+	 *            The port, this is most commonly 6667
 	 * @param login
 	 *            The login. This shows up in front of the host name when the
 	 *            bot has connected and serves as its "username" on IRC
@@ -51,8 +53,7 @@ public class Irc {
 	 *            The initial channel to Join. Additional channels can be joined
 	 *            using the JoinChannel() method
 	 */
-	public Irc(String server, String port, String botnick, String login,
-			String channel) {
+	public Irc(String server, String botnick, String port, String login) {
 		// Set a text-only browser USER_AGENT string allowed by Google
 		System.setProperty("http.agent","Lynx/2.8.5rel.1 libwww-FM/2.14 SSL-MM/1.4.1 GNUTLS/1.4.4");
 		
@@ -60,14 +61,13 @@ public class Irc {
 		this.port = port;
 		this.botnick = botnick;
 		this.login = login;
-		this.channel = channel;
-		
-		admins = new ArrayList<String>();
+
 		xml = new XMLReader();
 		google = new Google();
 		tlf = new TelefonKatalogen();
+		admins = new ArrayList<String>();
+		channels = new ArrayList<String>();
 		commands = new ArrayList<String>();
-		
 		commands.add("!players");
 		commands.add("!google");
 		commands.add("!tlf");
@@ -87,11 +87,14 @@ public class Irc {
 		// Hard code db settings for the !players command, as they are very
 		// specific to the functionality.
 		players = new DbConnection("com.mysql.jdbc.Driver", "sql.alandfaraway.org", 
-				"alandsyu_live", "alandsyu_parser", "");
+				"alandsyu_live", "alandsyu_parser", "ATmdMx6J");
+		Iterator<String> it = channels.iterator();
 		try {
 			connect();
 			login();
-			joinChannel(channel);
+			while(it.hasNext()) {
+				joinChannel(it.next());
+			}
 			run();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -106,6 +109,16 @@ public class Irc {
 	 */
 	public void setAdmin(String admin){
 		admins.add(admin);
+	}
+	
+	/**
+	 * Adds a channel to the list
+	 * 
+	 * @param channel
+	 *            The name of the channel to add
+	 */
+	public void setChannel(String channel){
+		channels.add(channel);
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 package bot;
 
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class HelperClass.
@@ -29,4 +30,5 @@ public class HelperClass {
 		return query.toLowerCase().replaceAll("\\n", " ").replaceAll("<", "")
 				.replaceAll(">", "").replaceAll("\\r", "");
 	}
+	
 }
