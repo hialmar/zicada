@@ -6,9 +6,22 @@ import java.net.URL;
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.Source;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Google.
+ */
 public class Google {
+	
+	/** The source. */
 	private Source source;
 
+	/**
+	 * Search.
+	 *
+	 * @param query the query
+	 * @return the string
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public String search(String query) throws IOException {
 		// Set a text-only browser USER_AGENT string, since google returns 443
 		// with the default java UA.

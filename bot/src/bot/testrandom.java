@@ -4,12 +4,19 @@
  */
 package bot;
 
+// TODO: Auto-generated Javadoc
 /**
- * 
+ * The Class testrandom.
+ *
  * @author b9
  */
 public class testrandom {
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
 
 		// example of input. the + can also be -

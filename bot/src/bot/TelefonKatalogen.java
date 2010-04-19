@@ -6,13 +6,31 @@ import java.net.URL;
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.Source;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TelefonKatalogen.
+ */
 public class TelefonKatalogen {
 
+	/** The name. */
 	private String name;
+	
+	/** The number. */
 	private String number;
+	
+	/** The address. */
 	private String address;
+	
+	/** The source. */
 	private Source source;
 
+	/**
+	 * Gets the tlf data.
+	 *
+	 * @param query the query
+	 * @return the tlf data
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public String getTlfData(String query) throws IOException {
 
 		if (query.isEmpty()) {
