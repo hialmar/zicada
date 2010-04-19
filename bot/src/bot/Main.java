@@ -9,46 +9,70 @@ import java.util.Properties;
 public class Main {
 
 	private Properties p;
-	private static String server;
-	private static String port;
-	private static String nick;
-	private static String user;
+	private static String ircserver;
+	private static String ircport;
+	private static String botnick;
+	private static String ircuser;
 	private static String[] admins;
 	private static String[] channels;
+	
+	private String driver;
+	private String players_sqlserver;
+	private String players_database;
+	private String players_username;
+	private String players_password;
+	private DbConnection connection;
 
 	/**
-	 * Gets the config.
-	 * 
-	 * @return the config
+	 * Instantiates a new main.
 	 */
-	public void getConfig() {
+	public Main() {
 		try {
 			p = new Properties();
 			p.load(new FileInputStream("config.ini"));
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		server = p.getProperty("server");
-		port = p.getProperty("port");
-		nick = p.getProperty("nick");
-		user = p.getProperty("user");
+		ircserver = p.getProperty("server");
+		ircport = p.getProperty("port");
+		botnick = p.getProperty("nick");
+		ircuser = p.getProperty("user");
 		admins = p.getProperty("admins").split(",");
 		channels = p.getProperty("channels").split(",");
+		
+		players_sqlserver = p.getProperty("players_sqlserver");
+		driver = p.getProperty("driver");
+		players_database = p.getProperty("players_database");
+		players_username = p.getProperty("players_username");
+		players_password = p.getProperty("players_password");
+	}
+	
+	/**
+	 * Gets the db connection.
+	 *
+	 * @return the db connection
+	 */
+	public DbConnection getDbConnection() {
+		try {
+			connection = new DbConnection(driver, players_sqlserver, 
+					players_database, players_username, players_password);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return connection;
+		
 	}
 
 	/**
 	 * The main method.
-	 * 
-	 * @param args
-	 *            the arguments
-	 * @throws Exception
-	 *             the exception
+	 *
+	 * @param args the arguments
+	 * @throws Exception the exception
 	 */
 	public static void main(String[] args) throws Exception {
-		Main main = new Main();
-		main.getConfig();
-		System.out.println("Logging onto " +server);
-		Irc irc = new Irc(server, nick, port, user);
+		new Main();
+		System.out.println("Logging onto " +ircserver);
+		Irc irc = new Irc(ircserver, botnick, ircport, ircuser);
 
 		for (String admin : admins) {
 			irc.setAdmin(admin.trim());

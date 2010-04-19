@@ -133,8 +133,8 @@ public class DbConnection {
 			ResultSet tsmResult = runQuery("SELECT Count(Name) AS tsm_players FROM characters WHERE IsOnline = 1 AND ServerID = 3");
 			ResultSet bgResult = runQuery("SELECT Count(Name) AS bg_players FROM characters WHERE IsOnline = 1 AND ServerID = 10");
 			tsmResult.next();
-			bgResult.next();
 			tsm = tsmResult.getInt("tsm_players");
+			bgResult.next();
 			bg = bgResult.getInt("bg_players");
 		} catch (SQLException e) {
 			e.printStackTrace();

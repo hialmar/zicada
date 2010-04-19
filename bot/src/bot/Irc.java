@@ -84,10 +84,8 @@ public class Irc {
 	 */
 	public void initialize() throws Exception {
 
-		// Hard code db settings for the !players command, as they are very
-		// specific to the functionality.
-		players = new DbConnection("com.mysql.jdbc.Driver", "sql.alandfaraway.org", 
-				"alandsyu_live", "alandsyu_parser", "");
+		Main db = new Main();
+		players = db.getDbConnection();
 		Iterator<String> it = channels.iterator();
 		try {
 			connect();
