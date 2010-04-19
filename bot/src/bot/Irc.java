@@ -87,7 +87,7 @@ public class Irc {
 		// Hard code db settings for the !players command, as they are very
 		// specific to the functionality.
 		players = new DbConnection("com.mysql.jdbc.Driver", "sql.alandfaraway.org", 
-				"alandsyu_live", "alandsyu_parser", "ATmdMx6J");
+				"alandsyu_live", "alandsyu_parser", "");
 		Iterator<String> it = channels.iterator();
 		try {
 			connect();
@@ -282,10 +282,9 @@ public class Irc {
 			writer.write("USER " + login + " 8 * : Java IRC Bot Project\r\n");
 			writer.flush();
 
-			// Read lines from the server until it tells us we have connected.
 			while ((line = reader.readLine()) != null) {
 				if (line.indexOf("376") >= 0) {
-					// We are now logged in.
+					System.out.println("Connected!");
 					break;
 				} else if (line.indexOf("433") >= 0) {
 					System.out.println("Nickname is already in use.");

@@ -47,13 +47,16 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		Main main = new Main();
 		main.getConfig();
+		System.out.println("Logging onto " +server);
 		Irc irc = new Irc(server, nick, port, user);
 
 		for (String admin : admins) {
-			irc.setAdmin(admin);
+			irc.setAdmin(admin.trim());
+			System.out.println("Registered admin: " + admin);
 		}
+		System.out.println("Connecting...");
 		for (String channel : channels) {
-			irc.setChannel(channel);
+			irc.setChannel(channel.trim());
 		}
 		irc.initialize();
 	}
