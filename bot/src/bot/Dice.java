@@ -1,36 +1,34 @@
 package bot;
 
 import java.util.Random;
-
 /**
  * The Class Dice.
  */
 public class Dice {
 
 	/** The generator. */
-	private Random generator;
-	
+    private Random generator;
+
 	/** The randlim. */
-	private int randlim;
+ 	private int randlim;
 
 	/**
 	 * Instantiates a new dice.
 	 */
-	public Dice() {
-		generator = new Random();
-	}
+    public Dice() {
+        generator = new Random();
+    }
 
 	/**
 	 * Rand.
 	 *
 	 * @param a the a
-	 * @param b the b
 	 * @return the int
 	 */
-	public int rand(int a, int b) {
-		randlim = generator.nextInt(a);
-		return randlim + 1 + b;
-	}
+    public int rand(int a) {
+        randlim = generator.nextInt(a);
+        return randlim + 1;
+    }
 
 	/**
 	 * Test.
@@ -40,15 +38,15 @@ public class Dice {
 	 * @param c the c
 	 * @return the string
 	 */
-	public String test(int a, int b, int c) {
-		String result = "";
-		int x = 1;
-		for (int i = b; i > 0; i--) {
-			Dice rand = new Dice();
-			String lol = ("Roll " + x + ": " + rand.rand(a, c) + "\n");
-			x++;
-			result += lol;
-		}
-		return result;
-	}
+    public int test(int a, int b, int c) {
+        int result = 0;
+        for (int i = a; i > 0; i--) {
+            Dice rand = new Dice();
+            int getDice = (rand.rand(b));
+            result += getDice;
+        }
+        result += c;
+        return result;
+      }
 }
+
