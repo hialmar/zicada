@@ -38,7 +38,7 @@ public class Dice {
 	 * @param c the c
 	 * @return the string
 	 */
-    public int test(int a, int b, int c) {
+    public int roll(int a, int b, int c) {
         int result = 0;
         for (int i = a; i > 0; i--) {
             Dice rand = new Dice();
@@ -48,5 +48,20 @@ public class Dice {
         result += c;
         return result;
       }
+
+    public String[] output (String input) {
+
+        String res[] = null;
+        input += "+0";
+        if (input.contains("+")) {
+            input = input.replaceAll("[+]", "d");
+
+        } else if (input.contains("-")) {
+            input = input.replaceAll("-", "d-");
+        }
+
+        res = input.split("d");
+        return res;
+    }
 }
 
