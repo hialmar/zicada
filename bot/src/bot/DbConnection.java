@@ -129,19 +129,57 @@ public class DbConnection {
 	public String getPlayers() throws Exception {
 		int tsm = 0;
 		int bg = 0;
+		int tsmdms = 0;
+		int bgdms = 0;
+		
 		try {
 			ResultSet tsmResult = runQuery("SELECT Count(Name) AS tsm_players FROM characters WHERE IsOnline = 1 AND ServerID = 3");
 			ResultSet bgResult = runQuery("SELECT Count(Name) AS bg_players FROM characters WHERE IsOnline = 1 AND ServerID = 10");
+			ResultSet tsmDmResult = runQuery("select Count(*) AS tsm_dms FROM players INNER JOIN characters ON players.id = characters.playerid WHERE characters.isonline = 1 AND players.isdm = 1 AND characters.serverid = 3");
+			ResultSet bgDmResult = runQuery("select Count(*) AS bg_dms FROM players INNER JOIN characters ON players.id = characters.playerid WHERE characters.isonline = 1 AND players.isdm = 1 AND characters.serverid = 10");
+
 			tsmResult.next();
 			tsm = tsmResult.getInt("tsm_players");
 			bgResult.next();
 			bg = bgResult.getInt("bg_players");
+			tsmDmResult.next();
+			tsmdms = tsmDmResult.getInt("tsm_dms");
+			bgDmResult.next();
+			bgdms = bgDmResult.getInt("bg_dms");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		int total = tsm + bg;
-		return "TSM: " + tsm + " BG: " + bg + " Total: " + total;
-
+		
+		tsm -= tsmdms;
+		bg -= bgdms;
+		String tsmplWord;
+		String bgplWord;
+		String tsmdmWord;
+		String bgdmWord;
+		
+		if (tsm == 1) {
+			tsmplWord = "player";
+		} else {
+			tsmplWord = "players";
+		}
+		if (bg == 1) {
+			bgplWord = "player";
+		} else {
+			bgplWord = "players";
+		}
+		if (tsmdms == 1) {
+			tsmdmWord = "DM";
+		} else {
+			tsmdmWord = "DMs";
+		}
+		if (bgdms == 1) {
+			bgdmWord = "DM";
+		} else {
+			bgdmWord = "DMs";
+		}
+		
+		return "Silver Marches has " + tsm + " " + tsmplWord + " and " + tsmdms + " " + tsmdmWord + 
+			   ", Baldurs Gate has " + bg + " " + bgplWord + " and " + bgdms + " " + bgdmWord;
 	}
 
 	/**
