@@ -1,11 +1,10 @@
 package bot;
 
+
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -24,8 +23,9 @@ public class XMLReader {
 	 */
 	public static final class SaxHandler extends DefaultHandler {
 
-		/** The city data. */
 		private String cityData = "";
+		/** The condition data. */
+		private String conditionData = "";
 		
 		/** The temp data. */
 		private String tempData = "";
@@ -36,13 +36,16 @@ public class XMLReader {
 		/** The humidity data. */
 		private String humidityData = "";
 
+		public String getCityData() {
+			return cityData;
+		}
 		/**
 		 * Gets the city data.
 		 *
 		 * @return the city data
 		 */
-		public String getCityData() {
-			return cityData;
+		public String getConditionData() {
+			return conditionData;
 		}
 
 		/**
@@ -82,6 +85,10 @@ public class XMLReader {
 			if (wName.equals("city")) {
 				// get the corresponding attribute from data=""
 				cityData = attrs.getValue("data");
+			}
+			if (wName.equals("condition")) {
+				// get the corresponding attribute from data=""
+				conditionData = attrs.getValue("data");
 			}
 			if (wName.equals("temp_c")) {
 				// get the corresponding attribute from data=""
@@ -128,8 +135,12 @@ public class XMLReader {
 			parser.parse(url.openStream(), handler);
 			// store parsed data in array
 			
-			result = "Location: " + handler.getCityData() + ", Temp: " + handler.getTempData() + "C" + ", "
-			+ handler.getWindData() + " " + handler.getHumidityData();
+			if(handler.getCityData().equals("")){
+				result = "No such city found. Usage: !weather <city>";
+			} else {
+				result = handler.getCityData() + ": " + handler.getConditionData() + ", " + handler.getTempData() + "C, " + handler.getWindData() + ", " + handler.getHumidityData();
+			}
+			
 
 		} catch (Exception ex) {
 			ex.printStackTrace(System.out);

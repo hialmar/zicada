@@ -54,8 +54,8 @@ public class Irc {
 	 *            using the JoinChannel() method
 	 */
 	public Irc(String server, String botnick, String port, String login) {
-		// Set a text-only browser USER_AGENT string allowed by Google
-		System.setProperty("http.agent","Lynx/2.8.5rel.1 libwww-FM/2.14 SSL-MM/1.4.1 GNUTLS/1.4.4");
+		// Set USER_AGENT string allowed by Google
+		System.setProperty("http.agent","Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.4) Gecko/20070515 Firefox/2.0.0.4");
 		
 		this.server = server;
 		this.port = port;

@@ -15,8 +15,8 @@ public class HelperClass {
 	 */
 	public static String htmlEnc(String query) {
 		return query.toLowerCase().replaceAll(" ", "%20").replaceAll("\\+",
-				"%2b").replaceAll("Ã¸", "%F8").replaceAll("Ã¦", "%E6")
-				.replaceAll("Ã¥", "%E5");
+				"%2b").replaceAll("å", "%F8").replaceAll("æ", "%E6")
+				.replaceAll("ø", "%E5");
 
 	}
 
