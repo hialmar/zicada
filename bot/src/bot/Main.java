@@ -9,6 +9,7 @@ import java.util.Properties;
 public class Main {
 
 	private Properties p;
+	private static String configFile;
 	private static String ircserver;
 	private static String ircport;
 	private static String botnick;
@@ -29,7 +30,7 @@ public class Main {
 	public Main() {
 		try {
 			p = new Properties();
-			p.load(new FileInputStream("config.ini"));
+			p.load(new FileInputStream(configFile));
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -70,6 +71,12 @@ public class Main {
 	 * @throws Exception the exception
 	 */
 	public static void main(String[] args) throws Exception {
+		if(args.length == 0){
+			System.err.println("Usage: java -jar bot.jar <configfile>");
+			System.exit(0);
+		} else {
+			configFile = args[0];
+		}
 		new Main();
 		System.out.println("Logging onto " +ircserver);
 		Irc irc = new Irc(ircserver, botnick, ircport, ircuser);
