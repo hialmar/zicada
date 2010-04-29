@@ -1,3 +1,20 @@
+/*
+ *     This file is part of zicbot.
+
+    zicbot is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    zicbot is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with zicbot.  If not, see <http://www.gnu.org/licenses/>.
+
+ */
 package bot;
 
 import java.io.IOException;
@@ -6,6 +23,9 @@ import java.net.URL;
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.Source;
 
+/**
+ * Class for parsing html from the various websites used by the bot.
+ */
 public class HtmlParser {
 
 	private String name;
@@ -14,7 +34,7 @@ public class HtmlParser {
 	private Source source;
 
 	/**
-	 * Gets the tlf data.
+	 * Gets data from http://www.telefonkatalogen.no/
 	 * 
 	 * @param query
 	 *            the query
