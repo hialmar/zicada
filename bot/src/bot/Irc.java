@@ -74,29 +74,24 @@ public class Irc {
 		commands.add("!weather");
 		commands.add("!join");
 		commands.add("!part");
+		commands.add("!help");
 	}
 
 	/**
 	 * Initialize. Connect to IRC and transfer control to the main run() loop.
 	 * 
-	 * @throws Exception
-	 *             the exception
 	 */
-	public void initialize() throws Exception {
+	public void initialize() {
 
 		Main db = new Main();
 		players = db.getDbConnection();
 		Iterator<String> it = channels.iterator();
-		try {
-			connect();
-			login();
-			while(it.hasNext()) {
-				joinChannel(it.next());
-			}
-			run();
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
+		connect();
+		login();
+		while(it.hasNext()) {
+			joinChannel(it.next());
 		}
+		run();
 	}
 
 	/**
@@ -125,13 +120,14 @@ public class Irc {
 	 * @throws Exception
 	 *             IOException
 	 */
-	public void connect() throws Exception {
+	public void connect() {
 		try {
 			socket = new Socket(server, Integer.parseInt(port));
 			writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			System.out.println("Could not connect to server: "+server);
+			System.exit(0);
 		}
 	}
 
@@ -218,7 +214,7 @@ public class Irc {
 	 * @throws Exception
 	 *             IO Exception
 	 */
-	public void joinChannel(String channel) throws Exception {
+	public void joinChannel(String channel) {
 		try {
 			writer.write("JOIN " + channel + "\r\n");
 			writer.flush();
@@ -253,7 +249,7 @@ public class Irc {
 	 * @throws Exception
 	 *             IO Exception
 	 */
-	public void keepAlive() throws Exception {
+	public void keepAlive() {
 		try {
 			if (line.startsWith("PING ")) {
 				writer.write("PONG " + line.substring(5) + "\r\n");
@@ -274,7 +270,7 @@ public class Irc {
 	 * @throws Exception
 	 *             IO Exception
 	 */
-	public void login() throws Exception {
+	public void login() {
 		try {
 			writer.write("NICK " + botnick + "\r\n");
 			writer.write("USER " + login + " 8 * : Java IRC Bot Project\r\n");
@@ -305,7 +301,7 @@ public class Irc {
 			writer.write("PRIVMSG " + getChannel() + " :" + message + "\r\n");
 			writer.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		
 	}
@@ -319,7 +315,7 @@ public class Irc {
 	 * @throws Exception
 	 *             IO Exception and Exception
 	 */
-	public void reader() throws Exception {
+	public void reader() {
 
 		try {
 			if (getCommand().matches("!players")) {
@@ -340,6 +336,14 @@ public class Irc {
 			if (getCommand().matches("!weather")) {
 				writeMessage(xml.parseData(getArgument()));
 			}
+			if (getCommand().matches("!help")) {
+				writer.write("PRIVMSG " + getChannel() + " :Available commands: ");
+				for (String command: commands) {
+					writer.write(command + " ");
+				}
+				writer.write("\r\n");
+				writer.flush();
+			}
 			
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -357,7 +361,7 @@ public class Irc {
 	 * @throws Exception
 	 *             IO Exception
 	 */
-	public void run() throws Exception {
+	public void run() {
 		// this is the main run loop
 		try {
 			while ((line = reader.readLine()) != null) {

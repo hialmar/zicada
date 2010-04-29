@@ -71,7 +71,7 @@ public class DbConnection {
 			Class.forName(this.driver).newInstance();
 			connect();
 		} catch (IOException e) {
-			System.out.println(e);
+			System.out.println(e.getMessage());
 		}
 
 	}
@@ -86,9 +86,9 @@ public class DbConnection {
 		try {
 			connection = DriverManager.getConnection("jdbc:mysql://" + server
 					+ "/" + database, username, password);
-		} catch (Exception ex) {
+		} catch (Exception e) {
 			System.out.println("Could not connect to database server");
-			throw ex;
+			throw e;
 		}
 	}
 
@@ -147,7 +147,7 @@ public class DbConnection {
 			bgDmResult.next();
 			bgdms = bgDmResult.getInt("bg_dms");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		
 		tsm -= tsmdms;

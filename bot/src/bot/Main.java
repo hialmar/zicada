@@ -26,30 +26,44 @@ public class Main {
 
 	/**
 	 * Instantiates a new main.
+	 * Parses the config file.
 	 */
 	public Main() {
 		try {
 			p = new Properties();
 			p.load(new FileInputStream(configFile));
 		} catch (Exception e) {
-			System.out.println(e);
+			System.out.println("There was a problem loading the config file :");
+			System.exit(0);
 		}
-		ircserver = p.getProperty("server");
-		ircport = p.getProperty("port");
-		botnick = p.getProperty("nick");
-		ircuser = p.getProperty("user");
-		admins = p.getProperty("admins").split(",");
-		channels = p.getProperty("channels").split(",");
-		
-		players_sqlserver = p.getProperty("players_sqlserver");
-		driver = p.getProperty("driver");
-		players_database = p.getProperty("players_database");
-		players_username = p.getProperty("players_username");
-		players_password = p.getProperty("players_password");
+		try {
+			ircserver = p.getProperty("server");
+			ircport = p.getProperty("port");
+			botnick = p.getProperty("nick");
+			if (botnick.length() > 8) {
+				throw new IllegalArgumentException("Botnick cannot be more than 8 characters long");
+			}
+			ircuser = p.getProperty("user");
+			admins = p.getProperty("admins").split(",");
+			channels = p.getProperty("channels").split(",");
+			
+			players_sqlserver = p.getProperty("players_sqlserver");
+			driver = p.getProperty("driver");
+			players_database = p.getProperty("players_database");
+			players_username = p.getProperty("players_username");
+			players_password = p.getProperty("players_password");
+		} catch (IllegalArgumentException ex) {
+			System.out.println(ex.getMessage());
+			System.exit(0);
+		} catch (Exception e) {
+			System.out.println("Config file not recognized");
+			System.exit(0);
+		}
+
 	}
 	
 	/**
-	 * Gets the db connection.
+	 * Returns a new connection based on the contents of the config file
 	 *
 	 * @return the db connection
 	 */
@@ -58,7 +72,7 @@ public class Main {
 			connection = new DbConnection(driver, players_sqlserver, 
 					players_database, players_username, players_password);
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		return connection;
 		
@@ -67,10 +81,10 @@ public class Main {
 	/**
 	 * The main method.
 	 *
-	 * @param args the arguments
+	 * @param args The name of the config file to use.
 	 * @throws Exception the exception
 	 */
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		if(args.length == 0){
 			System.err.println("Usage: java -jar bot.jar <configfile>");
 			System.exit(0);
@@ -90,5 +104,6 @@ public class Main {
 			irc.setChannel(channel.trim());
 		}
 		irc.initialize();
+		
 	}
 }
