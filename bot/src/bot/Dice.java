@@ -1,6 +1,7 @@
 package bot;
 
 import java.util.Random;
+
 /**
  * The Class Dice.
  */
@@ -54,7 +55,7 @@ public class Dice {
         String res[] = null;
         input += "+0";
         if (input.contains("+")) {
-            input = input.replaceAll("[+]", "d");
+            input = input.replaceAll("[+]","d");
 
         } else if (input.contains("-")) {
             input = input.replaceAll("-", "d-");
@@ -63,5 +64,26 @@ public class Dice {
         res = input.split("d");
         return res;
     }
-}
 
+    public String rollPrint (String query) {
+
+        if (query.isEmpty()) {
+
+            return "Usage: !roll XdY+/-Z";
+
+        } else {
+            String res[] = output(query);
+        /*Parses the array to integers*/
+        int x = Integer.parseInt(res[0]);
+        int y = Integer.parseInt(res[1]);
+        int z = Integer.parseInt(res[2]);
+        /*Runs the function which rolls the dice,
+        using the numbers fetched from input */
+        int result = roll(x, y, z);
+        String diceResult = ("you rolled " + query + ". And got: " + result);
+        return diceResult;
+
+       }
+
+    }
+}
