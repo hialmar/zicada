@@ -63,7 +63,7 @@ public class Main {
 	}
 	
 	/**
-	 * Returns a new connection based on the contents of the config file
+	 * Returns a new database connection based on the contents of the config file
 	 *
 	 * @return the db connection
 	 */

@@ -79,6 +79,13 @@ public class HtmlParser {
 		}
 	}
 
+	/**
+	 * Google search.
+	 *
+	 * @param query the query
+	 * @return the string
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public String googleSearch(String query) throws IOException {
 
 		if (query.isEmpty()) {
@@ -104,10 +111,15 @@ public class HtmlParser {
 		}
 	}
 
+	/**
+	 * Gets a quote from http://www.bash.org/
+	 *
+	 * @return the bash quote
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public String getBashQuote() throws IOException {
 
 		String sourceUrlString = "http://bash.org/?random";
-
 		try {
 			source = new Source(new URL(sourceUrlString).openStream());
 		} catch (IOException e) {
@@ -116,7 +128,7 @@ public class HtmlParser {
 		// Parse the entire page right away.
 		source.fullSequentialParse();
 
-		// The first search result is in the class named "r".
+		// The first search result is in the class named "qt".
 		Element firstResultElement = source.getFirstElementByClass("qt");
 		// Fetch it and remove all the annoying newline characters by using
 		// the HelperClass.

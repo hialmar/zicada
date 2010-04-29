@@ -9,75 +9,44 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class XMLReader.
  */
 public class XMLReader {
 	
-	/** The result. */
 	String result;
 
 	/**
-	 * The Class SaxHandler.
+	 * The Class SaxHandler extends DefaultHandler. This is the preferred way of using the SAX parser.
 	 */
 	public static final class SaxHandler extends DefaultHandler {
 
 		private String cityData = "";
-		/** The condition data. */
 		private String conditionData = "";
-		
-		/** The temp data. */
 		private String tempData = "";
-		
-		/** The wind data. */
 		private String windData = "";
-		
-		/** The humidity data. */
 		private String humidityData = "";
-
+		
 		public String getCityData() {
 			return cityData;
 		}
-		/**
-		 * Gets the city data.
-		 *
-		 * @return the city data
-		 */
+
 		public String getConditionData() {
 			return conditionData;
 		}
 
-		/**
-		 * Gets the humidity data.
-		 *
-		 * @return the humidity data
-		 */
 		public String getHumidityData() {
 			return humidityData;
 		}
 
-		/**
-		 * Gets the temp data.
-		 *
-		 * @return the temp data
-		 */
 		public String getTempData() {
 			return tempData;
 		}
 
-		/**
-		 * Gets the wind data.
-		 *
-		 * @return the wind data
-		 */
 		public String getWindData() {
 			return windData;
 		}
 
-		/* (non-Javadoc)
-		 * @see org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-		 */
 		@Override
 		public void startElement(String uri, String localName, String wName,
 				Attributes attrs) throws SAXException {
@@ -105,15 +74,14 @@ public class XMLReader {
 		}
 	}
 
-	/** The url. */
 	private URL url;
 
 	/**
 	 * Parses the data.
 	 *
 	 * @param city the city
-	 * @return the string
-	 * @throws MalformedURLException the malformed url exception
+	 * @return a string containing the data we get
+	 * @throws MalformedURLException
 	 */
 	public String parseData(String city) throws MalformedURLException {
 		city = HelperClass.htmlEnc(city);
@@ -140,8 +108,6 @@ public class XMLReader {
 			} else {
 				result = handler.getCityData() + ": " + handler.getConditionData() + ", " + handler.getTempData() + "C, " + handler.getWindData() + ", " + handler.getHumidityData();
 			}
-			
-
 		} catch (Exception ex) {
 			ex.printStackTrace(System.out);
 		}

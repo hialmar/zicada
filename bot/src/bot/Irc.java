@@ -36,21 +36,13 @@ public class Irc {
 	/**
 	 * Instantiates a new irc object and the other action objects, registers
 	 * commands.
-	 * 
-	 * 
-	 * @param server
-	 *            The irc server to connect to
-	 * @param botnick
-	 *            The botnick. Varies in max length between the various
-	 *            networks. To be safe, stay below 8 characters
-	 * @param port
-	 *            The port, this is most commonly 6667
-	 * @param login
-	 *            The login. This shows up in front of the host name when the
-	 *            bot has connected and serves as its "username" on IRC
-	 * @param channel
-	 *            The initial channel to Join. Additional channels can be joined
-	 *            using the JoinChannel() method
+	 *
+	 * @param server The irc server to connect to
+	 * @param botnick The botnick. Varies in max length between the various
+	 * networks. To be safe, stay below 8 characters
+	 * @param port The port, this is most commonly 6667
+	 * @param login The login. This shows up in front of the host name when the
+	 * bot has connected and serves as its "username" on IRC
 	 */
 	public Irc(String server, String botnick, String port, String login) {
 		// Set USER_AGENT string allowed by Google
@@ -77,7 +69,8 @@ public class Irc {
 	}
 
 	/**
-	 * Initialize. Connect to IRC and transfer control to the main run() loop.
+	 * Initialize. Connect to IRC, join the channels, and transfer control to the main run() loop.
+	 * Instantiates main to get the db-data from the config-file.
 	 * 
 	 */
 	public void initialize() {
@@ -115,9 +108,7 @@ public class Irc {
 	
 	/**
 	 * Connect. Set up a Socket and buffered connection
-	 * 
-	 * @throws Exception
-	 *             IOException
+	 *
 	 */
 	public void connect() {
 		try {
@@ -207,11 +198,8 @@ public class Irc {
 
 	/**
 	 * Join channel.
-	 * 
-	 * @param channel
-	 *            the channel to join
-	 * @throws Exception
-	 *             IO Exception
+	 *
+	 * @param channel the channel to join
 	 */
 	public void joinChannel(String channel) {
 		try {
@@ -225,13 +213,10 @@ public class Irc {
 	
 	/**
 	 * Part channel.
-	 * 
-	 * @param channel
-	 *            the channel to part
-	 * @throws Exception
-	 *             IO Exception
+	 *
+	 * @param channel the channel to part
 	 */
-	public void partChannel(String channel) throws Exception {
+	public void partChannel(String channel) {
 		try {
 			writer.write("PART " + channel + "\r\n");
 			writer.flush();
@@ -244,9 +229,8 @@ public class Irc {
 	/**
 	 * Keep alive. Required to stay logged in. We have 250 seconds to reply with
 	 * PONG whenever we recieve a PING from the server
-	 * 
-	 * @throws Exception
-	 *             IO Exception
+	 * If it does not get a PING, it simply writes the line to stdout.
+	 *
 	 */
 	public void keepAlive() {
 		try {
@@ -265,9 +249,7 @@ public class Irc {
 	/**
 	 * Login. Register our nick and send the USER command to the server. We wait
 	 * for the message of the day from the server to finish (376)
-	 * 
-	 * @throws Exception
-	 *             IO Exception
+	 *
 	 */
 	public void login() {
 		try {
@@ -309,10 +291,8 @@ public class Irc {
 	 * Reader. This method is used to catch actions that occur on the channels
 	 * we are currently on. Here we look for commands the bot should recognize
 	 * and do the actions they should perform. When ever we would look to check
-	 * weather actions occur, we should use this method.
-	 * 
-	 * @throws Exception
-	 *             IO Exception and Exception
+	 * wether actions occur, we should use this method.
+	 *
 	 */
 	public void reader() {
 
@@ -359,9 +339,7 @@ public class Irc {
 	 * Run. This is the main runloop that is passed execution from initialize()
 	 * when we start the bot. keepAlive() and reader() are called here for each
 	 * line the server sends us.
-	 * 
-	 * @throws Exception
-	 *             IO Exception
+	 *
 	 */
 	public void run() {
 		// this is the main run loop

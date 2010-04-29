@@ -1,14 +1,12 @@
 package bot;
 
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class HelperClass.
  */
 public class HelperClass {
 
 	/**
-	 * Html enc.
+	 * Html enc, used to encode whitespace and local characters to html format
 	 *
 	 * @param query the query
 	 * @return the string
@@ -24,11 +22,10 @@ public class HelperClass {
 	 * Strip new line.
 	 *
 	 * @param query the query
-	 * @return the string
+	 * @return the result
 	 */
 	public static String stripNewLine(String query) {
-		return query.toLowerCase().replaceAll("\\n", " ").replaceAll("", "")
-				.replaceAll("", "").replaceAll("\\r", "");
+		return query.toLowerCase().replaceAll("\\n", " ").replaceAll("\\r", "");
 	}
 	
 }

@@ -14,33 +14,11 @@ import java.sql.Statement;
  */
 public class DbConnection {
 
-	/** The connection. */
 	private Connection connection;
-
-	/**
-	 * The driver. This can be any JDBC compatible driver. By default, the bot
-	 * uses the Mysql connector driver.
-	 */
 	private String driver;
-
-	/**
-	 * The server. The hostname of the database server we wish to connect to.
-	 */
 	private String server;
-
-	/**
-	 * The database. The name of the database we would like to open.
-	 */
 	private String database;
-
-	/**
-	 * The username. The username for the database.
-	 */
 	private String username;
-
-	/**
-	 * The password. The password for the database.
-	 */
 	private String password;
 
 	/**
@@ -131,7 +109,7 @@ public class DbConnection {
 		int bg = 0;
 		int tsmdms = 0;
 		int bgdms = 0;
-		
+
 		try {
 			ResultSet tsmResult = runQuery("SELECT Count(Name) AS tsm_players FROM characters WHERE IsOnline = 1 AND ServerID = 3");
 			ResultSet bgResult = runQuery("SELECT Count(Name) AS bg_players FROM characters WHERE IsOnline = 1 AND ServerID = 10");
@@ -140,23 +118,28 @@ public class DbConnection {
 
 			tsmResult.next();
 			tsm = tsmResult.getInt("tsm_players");
+			
 			bgResult.next();
 			bg = bgResult.getInt("bg_players");
+			
 			tsmDmResult.next();
 			tsmdms = tsmDmResult.getInt("tsm_dms");
+			
 			bgDmResult.next();
 			bgdms = bgDmResult.getInt("bg_dms");
+			
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
-		
+
 		tsm -= tsmdms;
 		bg -= bgdms;
+		
 		String tsmplWord;
 		String bgplWord;
 		String tsmdmWord;
 		String bgdmWord;
-		
+
 		if (tsm == 1) {
 			tsmplWord = "player";
 		} else {
@@ -177,9 +160,10 @@ public class DbConnection {
 		} else {
 			bgdmWord = "DMs";
 		}
-		
-		return "Silver Marches has " + tsm + " " + tsmplWord + " and " + tsmdms + " " + tsmdmWord + 
-			   ", Baldurs Gate has " + bg + " " + bgplWord + " and " + bgdms + " " + bgdmWord;
+
+		return "Silver Marches has " + tsm + " " + tsmplWord + " and " + tsmdms
+				+ " " + tsmdmWord + ", Baldurs Gate has " + bg + " " + bgplWord
+				+ " and " + bgdms + " " + bgdmWord;
 	}
 
 	/**
