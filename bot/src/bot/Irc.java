@@ -32,6 +32,7 @@ public class Irc {
 	private ArrayList<String> channels;
 	private ArrayList<String> admins;
 	private DbConnection players;
+        private Dice dice;
 	
 	/**
 	 * Instantiates a new irc object and the other action objects, registers
@@ -58,6 +59,7 @@ public class Irc {
 		admins = new ArrayList<String>();
 		channels = new ArrayList<String>();
 		commands = new ArrayList<String>();
+                dice = new Dice();
 		commands.add("!players");
 		commands.add("!google");
 		commands.add("!tlf");
@@ -66,6 +68,7 @@ public class Irc {
 		commands.add("!part");
 		commands.add("!bash");
 		commands.add("!help");
+                commands.add("!roll");
 	}
 
 	/**
@@ -317,6 +320,9 @@ public class Irc {
 			}
 			if (getCommand().matches("!bash")) {
 				writeMessage(html.getBashQuote());
+			}
+                       	if (getCommand().matches("!roll")) {
+				writeMessage(dice.rollPrint(getArgument()));
 			}
 			if (getCommand().matches("!help")) {
 				writer.write("PRIVMSG " + getChannel() + " :Available commands: ");
