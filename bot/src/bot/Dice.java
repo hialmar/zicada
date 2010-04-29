@@ -31,7 +31,9 @@ public class Dice {
     }
 
     /**
-     * Test.
+     * Used to determine the number of eyes on the dice (int b)
+     * then roll the dice the designated number of times (int a)
+     * and lastly add or subtract int c from the total result before returning.
      *
      * @param a the a
      * @param b the b
@@ -52,7 +54,11 @@ public class Dice {
     }
 
     /**
-     * Output.
+     * Does a series of tests to determine what to do with the input from IRC
+     * which follows !roll. If the argument put by the user does not contain + nor -
+     * it will add +0 to the input.
+     * Then depending on wether the string contains either + or - it will replace this with "d"
+     * so that the string is split and put into an array
      *
      * @param input the input
      * @return the string[]
@@ -77,7 +83,11 @@ public class Dice {
     }
 
     /**
-     * Roll print.
+     * Fetches the argument from the user, if no argument is present it will inform
+     * the the user of this. When an argument is present, it will send the argument to
+     * the output method and then parse the retrieved array into three int values
+     * which is sent used in the roll method.
+     * Lastly it puts the result into a string which is returned back to the user on IRC
      *
      * @param query the query
      * @return the string
