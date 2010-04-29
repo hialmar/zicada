@@ -27,8 +27,8 @@ public class HelperClass {
 	 * @return the string
 	 */
 	public static String stripNewLine(String query) {
-		return query.toLowerCase().replaceAll("\\n", " ").replaceAll("<", "")
-				.replaceAll(">", "").replaceAll("\\r", "");
+		return query.toLowerCase().replaceAll("\\n", " ").replaceAll("", "")
+				.replaceAll("", "").replaceAll("\\r", "");
 	}
 	
 }

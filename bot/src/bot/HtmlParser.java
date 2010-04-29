@@ -6,30 +6,21 @@ import java.net.URL;
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.Source;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class TelefonKatalogen.
- */
-public class TelefonKatalogen {
+public class HtmlParser {
 
-	/** The name. */
 	private String name;
-	
-	/** The number. */
 	private String number;
-	
-	/** The address. */
 	private String address;
-	
-	/** The source. */
 	private Source source;
 
 	/**
 	 * Gets the tlf data.
-	 *
-	 * @param query the query
+	 * 
+	 * @param query
+	 *            the query
 	 * @return the tlf data
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public String getTlfData(String query) throws IOException {
 
@@ -86,5 +77,50 @@ public class TelefonKatalogen {
 			}
 			return number + ", " + name + "," + address;
 		}
+	}
+
+	public String googleSearch(String query) throws IOException {
+
+		if (query.isEmpty()) {
+			return "Usage: !google <query>";
+		} else {
+			query = HelperClass.htmlEnc(query);
+			String sourceUrlString = "http://www.google.com/search?q=" + query;
+			try {
+				source = new Source(new URL(sourceUrlString).openStream());
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+			}
+
+			// Parse the entire page right away.
+			source.fullSequentialParse();
+
+			// The first search result is in the class named "r".
+			Element firstResultElement = source.getFirstElementByClass("r");
+			// Fetch it and remove all the annoying newline characters by using
+			// the HelperClass.
+			return HelperClass.stripNewLine(firstResultElement.getRenderer()
+					.toString());
+		}
+	}
+
+	public String getBashQuote() throws IOException {
+
+		String sourceUrlString = "http://bash.org/?random";
+
+		try {
+			source = new Source(new URL(sourceUrlString).openStream());
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+		// Parse the entire page right away.
+		source.fullSequentialParse();
+
+		// The first search result is in the class named "r".
+		Element firstResultElement = source.getFirstElementByClass("qt");
+		// Fetch it and remove all the annoying newline characters by using
+		// the HelperClass.
+		return HelperClass.stripNewLine(firstResultElement.getRenderer()
+				.toString());
 	}
 }

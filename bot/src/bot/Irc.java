@@ -27,8 +27,7 @@ public class Irc {
 	private BufferedReader reader;
 	private BufferedWriter writer;
 	private XMLReader xml;
-	private Google google;
-	private TelefonKatalogen tlf;
+	private HtmlParser html;
 	private ArrayList<String> commands;
 	private ArrayList<String> channels;
 	private ArrayList<String> admins;
@@ -63,8 +62,7 @@ public class Irc {
 		this.login = login;
 
 		xml = new XMLReader();
-		google = new Google();
-		tlf = new TelefonKatalogen();
+		html = new HtmlParser();
 		admins = new ArrayList<String>();
 		channels = new ArrayList<String>();
 		commands = new ArrayList<String>();
@@ -74,6 +72,7 @@ public class Irc {
 		commands.add("!weather");
 		commands.add("!join");
 		commands.add("!part");
+		commands.add("!bash");
 		commands.add("!help");
 	}
 
@@ -328,13 +327,16 @@ public class Irc {
 				partChannel(getArgument());
 			}
 			if (getCommand().matches("!tlf")) {
-				writeMessage(tlf.getTlfData(getArgument()));
+				writeMessage(html.getTlfData(getArgument()));
 			}
 			if (getCommand().matches("!google")) {
-				writeMessage(google.search(getArgument()));
+				writeMessage(html.googleSearch(getArgument()));
 			}
 			if (getCommand().matches("!weather")) {
 				writeMessage(xml.parseData(getArgument()));
+			}
+			if (getCommand().matches("!bash")) {
+				writeMessage(html.getBashQuote());
 			}
 			if (getCommand().matches("!help")) {
 				writer.write("PRIVMSG " + getChannel() + " :Available commands: ");
