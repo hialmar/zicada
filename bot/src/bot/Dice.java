@@ -51,6 +51,12 @@ public class Dice {
         return result;
     }
 
+    /**
+     * Output.
+     *
+     * @param input the input
+     * @return the string[]
+     */
     public String[] output(String input) {
 
         String res[] = null;
@@ -70,6 +76,12 @@ public class Dice {
         return res;
     }
 
+    /**
+     * Roll print.
+     *
+     * @param query the query
+     * @return the string
+     */
     public String rollPrint(String query) {
 
         if (query.isEmpty()) {
