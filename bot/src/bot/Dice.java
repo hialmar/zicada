@@ -44,24 +44,31 @@ public class Dice {
         for (int i = a; i > 0; i--) {
             Dice rand = new Dice();
             int getDice = (rand.rand(b));
-            result += getDice;
-        }
+           
+
+                result += getDice;
+
         result += c;
+        }
         return result;
-      }
+    }
 
     public String[] output (String input) {
 
         String res[] = null;
-        input += "+0";
+
+        if (!input.contains("+")) {
+            input += "+0";
+        }
         if (input.contains("+")) {
             input = input.replaceAll("[+]","d");
 
-        } else if (input.contains("-")) {
+        } else {
             input = input.replaceAll("-", "d-");
         }
 
         res = input.split("d");
+
         return res;
     }
 
@@ -84,6 +91,5 @@ public class Dice {
         return diceResult;
 
        }
-
     }
 }
