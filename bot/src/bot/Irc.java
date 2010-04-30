@@ -64,8 +64,7 @@ public class Irc {
 	 */
 	public Irc(String server, String botnick, String port, String login) {
 		// Set USER_AGENT string allowed by Google
-		System.setProperty("http.agent","Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.4) Gecko/20070515 Firefox/2.0.0.4");
-		
+		System.setProperty("http.agent","Opera/9.80 (Windows NT 6.0; U; en) Presto/2.2.15 Version/10.00");
 		this.server = server;
 		this.port = port;
 		this.botnick = botnick;

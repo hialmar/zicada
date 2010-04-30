@@ -22,14 +22,16 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 
 import org.junit.Test;
-
+// Test weather the action classes return data.
 public class HtmlParserTest {
 
 	@Test
 	public void testGetTlfData() {
+		// set the UA first, or google fails.
+		System.setProperty("http.agent","Opera/9.80 (Windows NT 6.0; U; en) Presto/2.2.15 Version/10.00");
 		HtmlParser parsetest = new HtmlParser();
 		try {
-			assertNotNull(parsetest.getTlfData(""));
+			assertNotNull(parsetest.getTlfData("mari-ann akerjord"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -39,7 +41,7 @@ public class HtmlParserTest {
 	public void testGoogleSearch() {
 		HtmlParser parsetest = new HtmlParser();
 		try {
-			assertNotNull(parsetest.googleSearch(""));
+			assertNotNull(parsetest.googleSearch("test"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

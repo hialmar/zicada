@@ -43,7 +43,6 @@ public class HtmlParser {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public String getTlfData(String query) throws IOException {
-
 		if (query.isEmpty()) {
 			return "Usage: !tlf <name/number/address>";
 		} else {
@@ -107,7 +106,6 @@ public class HtmlParser {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public String googleSearch(String query) throws IOException {
-
 		if (query.isEmpty()) {
 			return "Usage: !google <query>";
 		} else {
@@ -126,8 +124,10 @@ public class HtmlParser {
 			Element firstResultElement = source.getFirstElementByClass("r");
 			// Fetch it and remove all the annoying newline characters by using
 			// the HelperClass.
+			
 			return HelperClass.stripNewLine(firstResultElement.getRenderer()
 					.toString());
+			
 		}
 	}
 
@@ -138,7 +138,6 @@ public class HtmlParser {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public String getBashQuote() throws IOException {
-
 		String sourceUrlString = "http://bash.org/?random";
 		try {
 			source = new Source(new URL(sourceUrlString).openStream());
