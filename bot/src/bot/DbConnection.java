@@ -107,26 +107,36 @@ public class DbConnection {
 	public String getPlayers() throws Exception {
 		int tsm = 0;
 		int bg = 0;
+		int ms = 0;
 		int tsmdms = 0;
 		int bgdms = 0;
+		int msdms = 0;
 
 		try {
 			ResultSet tsmResult = runQuery("SELECT Count(Name) AS tsm_players FROM characters WHERE IsOnline = 1 AND ServerID = 3");
 			ResultSet bgResult = runQuery("SELECT Count(Name) AS bg_players FROM characters WHERE IsOnline = 1 AND ServerID = 10");
+			ResultSet msResult = runQuery("SELECT Count(Name) AS ms_players FROM characters WHERE IsOnline = 1 AND ServerID = 9");
 			ResultSet tsmDmResult = runQuery("select Count(*) AS tsm_dms FROM players INNER JOIN characters ON players.id = characters.playerid WHERE characters.isonline = 1 AND players.isdm = 1 AND characters.serverid = 3");
 			ResultSet bgDmResult = runQuery("select Count(*) AS bg_dms FROM players INNER JOIN characters ON players.id = characters.playerid WHERE characters.isonline = 1 AND players.isdm = 1 AND characters.serverid = 10");
+			ResultSet msDmResult = runQuery("select Count(*) AS ms_dms FROM players INNER JOIN characters ON players.id = characters.playerid WHERE characters.isonline = 1 AND players.isdm = 1 AND characters.serverid = 9");
 
 			tsmResult.next();
 			tsm = tsmResult.getInt("tsm_players");
 			
 			bgResult.next();
 			bg = bgResult.getInt("bg_players");
+
+			msResult.next();
+			ms = msResult.getInt("ms_players");
 			
 			tsmDmResult.next();
 			tsmdms = tsmDmResult.getInt("tsm_dms");
 			
 			bgDmResult.next();
 			bgdms = bgDmResult.getInt("bg_dms");
+						
+			msDmResult.next();
+			msdms = msDmResult.getInt("ms_dms");
 			
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -134,11 +144,14 @@ public class DbConnection {
 
 		tsm -= tsmdms;
 		bg -= bgdms;
+		ms -= msdms;
 		
 		String tsmplWord;
 		String bgplWord;
+		String msplWord;
 		String tsmdmWord;
 		String bgdmWord;
+		String msdmWord;
 
 		if (tsm == 1) {
 			tsmplWord = "player";
@@ -150,6 +163,11 @@ public class DbConnection {
 		} else {
 			bgplWord = "players";
 		}
+		if (ms == 1) {
+			msplWord = "player";
+		} else {
+			msplWord = "players";
+		}
 		if (tsmdms == 1) {
 			tsmdmWord = "DM";
 		} else {
@@ -160,10 +178,18 @@ public class DbConnection {
 		} else {
 			bgdmWord = "DMs";
 		}
+		if (msdms == 1) {
+			msdmWord = "DM";
+		} else {
+			msdmWord = "DMs";
+		}
 
-		return "Silver Marches has " + tsm + " " + tsmplWord + " and " + tsmdms
-				+ " " + tsmdmWord + ", Baldurs Gate has " + bg + " " + bgplWord
-				+ " and " + bgdms + " " + bgdmWord;
+		return "Silver Marches has " + tsm + " " + tsmplWord 
+				+ " and " + tsmdms + " " + tsmdmWord + 
+				", Baldurs Gate has " + bg + " " + bgplWord
+				+ " and " + bgdms + " " + bgdmWord + 
+				", Moonshaes has " + ms + " " + msplWord
+				+ " and " + msdms + " " + msdmWord + ".";
 	}
 
 	/**
