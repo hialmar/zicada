@@ -23,7 +23,7 @@ public class DbConnection {
 
 	/**
 	 * Instantiates a new db connection.
-	 * 
+	 *
 	 * @param driver
 	 *            This can be any JDBC compatible driver. By default, the bot
 	 *            uses the Mysql connector driver.
@@ -56,7 +56,7 @@ public class DbConnection {
 
 	/**
 	 * Connect.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If we can't connect to the database.
 	 */
@@ -73,7 +73,7 @@ public class DbConnection {
 	/**
 	 * Run query. This method runs a check to see wether the connection is still
 	 * valid, and creates a new one if it is not.
-	 * 
+	 *
 	 * @param sql
 	 *            The SQL statement we would like to run.
 	 * @return ResultSet containing the results.
@@ -99,7 +99,7 @@ public class DbConnection {
 	/**
 	 * Gets the players who are currently logged into any of the servers in ALFA
 	 * (http://www.alandfaraway.org)
-	 * 
+	 *
 	 * @return the currently logged in players
 	 * @throws Exception
 	 *             Stack Trace to stdout.
@@ -113,31 +113,31 @@ public class DbConnection {
 		int msdms = 0;
 
 		try {
-			ResultSet tsmResult = runQuery("SELECT Count(Name) AS tsm_players FROM characters WHERE IsOnline = 1 AND ServerID = 3");
-			ResultSet bgResult = runQuery("SELECT Count(Name) AS bg_players FROM characters WHERE IsOnline = 1 AND ServerID = 10");
-			ResultSet msResult = runQuery("SELECT Count(Name) AS ms_players FROM characters WHERE IsOnline = 1 AND ServerID = 9");
-			ResultSet tsmDmResult = runQuery("select Count(*) AS tsm_dms FROM players INNER JOIN characters ON players.id = characters.playerid WHERE characters.isonline = 1 AND players.isdm = 1 AND characters.serverid = 3");
-			ResultSet bgDmResult = runQuery("select Count(*) AS bg_dms FROM players INNER JOIN characters ON players.id = characters.playerid WHERE characters.isonline = 1 AND players.isdm = 1 AND characters.serverid = 10");
-			ResultSet msDmResult = runQuery("select Count(*) AS ms_dms FROM players INNER JOIN characters ON players.id = characters.playerid WHERE characters.isonline = 1 AND players.isdm = 1 AND characters.serverid = 9");
+			ResultSet tsmResult = runQuery("SELECT Count(characters.Name) AS tsm_players FROM characters INNER JOIN servers ON characters.ServerID = servers.ID INNER JOIN pwdata ON pwdata.`Name` = servers.`Name` AND pwdata.`Key` = 'ACR_TIME_SERVERTIME' AND pwdata.`Last` >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 10 MINUTE) WHERE IsOnline = 1 AND ServerID = 3");
+			ResultSet bgResult = runQuery("SELECT Count(characters.Name) AS bg_players FROM characters INNER JOIN servers ON characters.ServerID = servers.ID INNER JOIN pwdata ON pwdata.`Name` = servers.`Name` AND pwdata.`Key` = 'ACR_TIME_SERVERTIME' AND pwdata.`Last` >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 10 MINUTE) WHERE IsOnline = 1 AND ServerID = 10");
+			ResultSet msResult = runQuery("SELECT Count(characters.Name) AS ms_players FROM characters INNER JOIN servers ON characters.ServerID = servers.ID INNER JOIN pwdata ON pwdata.`Name` = servers.`Name` AND pwdata.`Key` = 'ACR_TIME_SERVERTIME' AND pwdata.`Last` >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 10 MINUTE) WHERE IsOnline = 1 AND ServerID = 9");
+			ResultSet tsmDmResult = runQuery("select Count(*) AS tsm_dms FROM players INNER JOIN characters ON players.id = characters.playerid INNER JOIN servers ON characters.ServerID = servers.ID INNER JOIN pwdata ON pwdata.`Name` = servers.`Name` AND pwdata.`Key` = 'ACR_TIME_SERVERTIME' AND pwdata.`Last` >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 10 MINUTE) WHERE characters.isonline = 1 AND players.isdm = 1 AND characters.serverid = 3");
+			ResultSet bgDmResult = runQuery("select Count(*) AS bg_dms FROM players INNER JOIN characters ON players.id = characters.playerid INNER JOIN servers ON characters.ServerID = servers.ID INNER JOIN pwdata ON pwdata.`Name` = servers.`Name` AND pwdata.`Key` = 'ACR_TIME_SERVERTIME' AND pwdata.`Last` >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 10 MINUTE) WHERE characters.isonline = 1 AND players.isdm = 1 AND characters.serverid = 10");
+			ResultSet msDmResult = runQuery("select Count(*) AS ms_dms FROM players INNER JOIN characters ON players.id = characters.playerid INNER JOIN servers ON characters.ServerID = servers.ID INNER JOIN pwdata ON pwdata.`Name` = servers.`Name` AND pwdata.`Key` = 'ACR_TIME_SERVERTIME' AND pwdata.`Last` >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 10 MINUTE) WHERE characters.isonline = 1 AND players.isdm = 1 AND characters.serverid = 9");
 
 			tsmResult.next();
 			tsm = tsmResult.getInt("tsm_players");
-			
+
 			bgResult.next();
 			bg = bgResult.getInt("bg_players");
 
 			msResult.next();
 			ms = msResult.getInt("ms_players");
-			
+
 			tsmDmResult.next();
 			tsmdms = tsmDmResult.getInt("tsm_dms");
-			
+
 			bgDmResult.next();
 			bgdms = bgDmResult.getInt("bg_dms");
-						
+
 			msDmResult.next();
 			msdms = msDmResult.getInt("ms_dms");
-			
+
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -145,7 +145,7 @@ public class DbConnection {
 		tsm -= tsmdms;
 		bg -= bgdms;
 		ms -= msdms;
-		
+
 		String tsmplWord;
 		String bgplWord;
 		String msplWord;
@@ -184,17 +184,17 @@ public class DbConnection {
 			msdmWord = "DMs";
 		}
 
-		return "Silver Marches has " + tsm + " " + tsmplWord 
-				+ " and " + tsmdms + " " + tsmdmWord + 
+		return "Silver Marches has " + tsm + " " + tsmplWord
+				+ " and " + tsmdms + " " + tsmdmWord +
 				", Baldurs Gate has " + bg + " " + bgplWord
-				+ " and " + bgdms + " " + bgdmWord + 
+				+ " and " + bgdms + " " + bgdmWord +
 				", Moonshaes has " + ms + " " + msplWord
 				+ " and " + msdms + " " + msdmWord + ".";
 	}
 
 	/**
 	 * Close connection.
-	 * 
+	 *
 	 * @throws SQLException
 	 *             sQL exception
 	 */
